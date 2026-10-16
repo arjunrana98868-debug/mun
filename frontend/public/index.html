@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MUN CV Analyzer</title>
+<style>
+  :root { --bg:#f5f6fa; --card:#fff; --text:#1d2433; --muted:#6b7280; --accent:#2f5bea; --border:#e3e6ee; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#12151c; --card:#1b1f2a; --text:#e8ebf3; --muted:#9aa3b5; --accent:#6b8cff; --border:#2b3140; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, sans-serif; background:var(--bg); color:var(--text);
+         min-height:100vh; display:flex; justify-content:center; padding:32px 16px; }
+  main { width:100%; max-width:560px; }
+  h1 { font-size:1.5rem; margin:0 0 4px; }
+  p.sub { color:var(--muted); margin:0 0 24px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:16px; }
+  #drop { border:2px dashed var(--border); border-radius:12px; padding:32px 16px; text-align:center; cursor:pointer; color:var(--muted); }
+  #drop.over { border-color:var(--accent); color:var(--accent); }
+  #fileName { margin-top:8px; font-size:.9rem; color:var(--text); }
+  button { width:100%; margin-top:16px; padding:12px; font-size:1rem; border:0; border-radius:10px;
+           background:var(--accent); color:#fff; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .stat { background:var(--bg); border-radius:10px; padding:14px; }
+  .stat .label { font-size:.8rem; color:var(--muted); }
+  .stat .value { font-size:1.6rem; font-weight:600; margin-top:2px; word-break:break-word; }
+  ul { margin:8px 0 0; padding-left:18px; font-size:.9rem; }
+  li { margin:4px 0; }
+  .err { color:#d93025; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>MUN CV Analyzer</h1>
+  <p class="sub">Upload a CV (.pdf or .txt) to see how many MUNs the person has done and where they're based.</p>
+
+  <div class="card">
+    <div id="drop">Click or drag a CV here<div id="fileName"></div></div>
+    <input id="file" type="file" accept=".pdf,.txt" class="hidden">
+    <button id="go" disabled>Analyze CV</button>
+  </div>
+
+  <div id="status" class="card hidden"></div>
+
+  <div id="result" class="card hidden">
+    <div class="stats">
+      <div class="stat"><div class="label">MUNs done</div><div class="value" id="mun">-</div></div>
+      <div class="stat"><div class="label">Location</div><div class="value" id="loc">-</div></div>
+    </div>
+    <div id="evidenceWrap" class="hidden" style="margin-top:16px">
+      <div class="label" style="color:var(--muted);font-size:.85rem">MUN entries found</div>
+      <ul id="evidence"></ul>
+    </div>
+  </div>
+</main>
+
+<script>
+const drop = document.getElementById("drop");
+const fileInput = document.getElementById("file");
+const fileName = document.getElementById("fileName");
+const go = document.getElementById("go");
+const statusBox = document.getElementById("status");
+const resultBox = document.getElementById("result");
+let chosen = null;
+
+function setFile(f) {
+  if (!f) return;
+  chosen = f;
+  fileName.textContent = f.name;
+  go.disabled = false;
+}
+
+drop.addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", () => setFile(fileInput.files[0]));
+drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("over"); });
+drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+drop.addEventListener("drop", (e) => {
+  e.preventDefault(); drop.classList.remove("over");
+  setFile(e.dataTransfer.files[0]);
+});
+
+go.addEventListener("click", async () => {
+  if (!chosen) return;
+  go.disabled = true;
+  resultBox.classList.add("hidden");
+  statusBox.classList.remove("hidden");
+  statusBox.classList.remove("err");
+  statusBox.textContent = "Analyzing...";
+
+  const fd = new FormData();
+  fd.append("cv", chosen);
+  try {
+    const res = await fetch("/api/analyze", { method: "POST", body: fd });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Something went wrong");
+
+    document.getElementById("mun").textContent = data.mun_count;
+    document.getElementById("loc").textContent = data.location || "Not found";
+    const ul = document.getElementById("evidence");
+    ul.innerHTML = "";
+    (data.matched || []).forEach((m) => {
+      const li = document.createElement("li");
+      li.textContent = m.replace(/^[-*•\s]+/, "");   // textContent: safe against HTML in CVs
+      ul.appendChild(li);
+    });
+    document.getElementById("evidenceWrap").classList.toggle("hidden", !(data.matched || []).length);
+
+    statusBox.classList.add("hidden");
+    resultBox.classList.remove("hidden");
+  } catch (e) {
+    statusBox.classList.add("err");
+    statusBox.textContent = "Error: " + e.message;
+  } finally {
+    go.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

@@ -216,24 +216,58 @@ static string findLocation(const vector<string> &lines) {
 
 // ---------- main ----------
 
+static string jsonEscape(const string &s) {
+    string o;
+    for (unsigned char c : s) {
+        if (c == '"') o += "\\\"";
+        else if (c == '\\') o += "\\\\";
+        else if (c == '\n') o += "\\n";
+        else if (c == '\r' || c == '\t') o += ' ';
+        else if (c < 0x20) o += ' ';
+        else o += (char)c;
+    }
+    return o;
+}
+
 int main(int argc, char **argv) {
     if (argc < 2) {
-        cerr << "Usage: " << argv[0] << " <cv.txt>\n";
+        cerr << "Usage: " << argv[0] << " <cv.txt> [--json]\n";
         return 1;
     }
+    bool asJson = (argc >= 3 && string(argv[2]) == "--json");
+
+    ifstream probe(argv[1]);
+    if (!probe) {
+        cerr << "File not found: " << argv[1] << "\n";
+        return 1;
+    }
+    probe.close();
+
     vector<string> lines = readLines(argv[1]);
     if (lines.empty()) {
-        cerr << "Could not read file or file is empty: " << argv[1] << "\n";
+        cerr << "File is empty: " << argv[1] << "\n";
         return 1;
     }
 
     MunResult mun = countMuns(lines);
     string loc = findLocation(lines);
 
+    if (asJson) {
+        cout << "{\"mun_count\":" << mun.total
+             << ",\"entries_found\":" << mun.entries
+             << ",\"claimed\":" << mun.claimed
+             << ",\"location\":\"" << jsonEscape(loc) << "\""
+             << ",\"matched\":[";
+        for (size_t i = 0; i < mun.matched.size(); i++) {
+            if (i) cout << ",";
+            cout << "\"" << jsonEscape(trim(mun.matched[i])) << "\"";
+        }
+        cout << "]}\n";
+        return 0;
+    }
+
     cout << "MUNs done : " << mun.total << "\n";
     cout << "Location  : " << (loc.empty() ? "Not found" : loc) << "\n";
-
-    // Evidence, so the result is easy to verify/debug
     cout << "\n--- details ---\n";
     cout << "Entries found : " << mun.entries << "\n";
     cout << "Claimed in CV : " << mun.claimed << "\n";
