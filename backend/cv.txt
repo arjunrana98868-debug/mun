@@ -1,0 +1,21 @@
+Krishiv Negi
+Email: krishiv@example.com | Phone: +91 98765 43210
+Location: Naini Tal, Uttarakhand
+
+SUMMARY
+Second-year engineering student with a keen interest in diplomacy and public speaking.
+Attended 8+ MUNs at school and college level.
+
+EDUCATION
+B.Tech Computer Science, 2024 - Present
+
+MUN EXPERIENCE
+- Delegate, IITMUN 2023 - Special Mention
+- Chair, Sherwood MUN 2024
+- Delegate (UNSC), Delhi Model United Nations 2023
+- Delegate, Doon School MUN 2022 - Best Delegate
+- Rapporteur, St. Joseph's MUN 2024
+- Participated in Nainital MUN 2022
+
+PROJECTS
+- CV parser in C++ (PBL project)
