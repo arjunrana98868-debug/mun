@@ -1,8 +1,7 @@
-#include "operations.h"
-#include "Committee.h"
+#pragma once
 #include "db.h"
 
-void addCommittee() {
+inline void addCommittee() {
     string n = readLine("Enter committee name: ");
     if (n.empty()) {
         cout << "Name cannot be empty.\n";
@@ -17,7 +16,7 @@ void addCommittee() {
     cout << "Committee added successfully.\n";
 }
 
-void addPortfolio() {
+inline void addPortfolio() {
     int ci = selectCommittee();
     if (ci == -1) return;
 
@@ -30,7 +29,7 @@ void addPortfolio() {
         cout << "Portfolio already exists in this committee.\n";
         return;
     }
-    int cap = readInt("Enter capacity (number of delegates allowed): ");
+    int cap = readInt("Enter capacity: ");
     if (cap <= 0) {
         cout << "Capacity must be greater than 0.\n";
         return;
@@ -40,7 +39,7 @@ void addPortfolio() {
     cout << "Portfolio added successfully.\n";
 }
 
-void setPortfolioCapacity() {
+inline void setPortfolioCapacity() {
     int ci = selectCommittee();
     if (ci == -1) return;
     int pi = selectPortfolio(ci);
@@ -62,7 +61,7 @@ void setPortfolioCapacity() {
     cout << "Capacity updated.\n";
 }
 
-void allocateDelegate() {
+inline void allocateDelegate() {
     int ci = selectCommittee();
     if (ci == -1) return;
     int pi = selectPortfolio(ci);
@@ -78,21 +77,16 @@ void allocateDelegate() {
         cout << "Name cannot be empty.\n";
         return;
     }
-
-    // Check conference-wide to prevent multi-committee allocation
-    string existingComm, existingPort;
-    if (isDelegateAllocatedConferenceWide(d, existingComm, existingPort)) {
-        cout << "Error: Delegate '" << d << "' is already allocated to '"
-             << existingPort << "' in committee '" << existingComm << "'.\n";
+    if (pf.has(d)) {
+        cout << "Delegate is already allocated to this portfolio.\n";
         return;
     }
-
     if (!dbAllocate(committees[ci].name, pf.name, d)) return;
     pf.allocate(d);
     cout << "Delegate allocated. Seats left: " << pf.available() << "\n";
 }
 
-void deallocateDelegate() {
+inline void deallocateDelegate() {
     int ci = selectCommittee();
     if (ci == -1) return;
     int pi = selectPortfolio(ci);
@@ -103,24 +97,12 @@ void deallocateDelegate() {
         cout << "No delegates are currently allocated to this portfolio.\n";
         return;
     }
-
-    cout << "Allocated delegates: ";
-    for (size_t i = 0; i < pf.allocated.size(); i++)
-        cout << (i ? ", " : "") << pf.allocated[i];
-    cout << "\n";
-
-    string d = readLine("Enter delegate name to remove: ");
+    string d = readLine("Enter delegate name to deallocate: ");
     if (!pf.has(d)) {
         cout << "Delegate not found in this portfolio.\n";
         return;
     }
-
-    if (!confirm("Remove delegate '" + d + "' from portfolio '" + pf.name + "'?")) {
-        cout << "Cancelled.\n";
-        return;
-    }
-
     if (!dbDeallocate(committees[ci].name, pf.name, d)) return;
     pf.deallocate(d);
-    cout << "Delegate deallocated. Available seats: " << pf.available() << "\n";
+    cout << "Delegate removed. Seats left: " << pf.available() << "\n";
 }
