@@ -6,7 +6,7 @@ class Delegate {
 public:
     string name;
     int experience;
-    Delegate(string n, int e) {
+    Delegate(string n, int e)  {
         name = n;
         experience = e;
     }
@@ -117,4 +117,4 @@ int main() {
     allocateDelegates(head);
     deleteList(head);
     return 0;
-}
+} 
