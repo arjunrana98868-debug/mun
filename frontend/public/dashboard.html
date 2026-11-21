@@ -1,537 +1,203 @@
 <!DOCTYPE html>
+<!-- File: frontend/public/dashboard.html -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MUN Dashboard - Executive Management Platform</title>
-  
-  <!-- Font and Icons -->
+  <title>MUN Dashboard &amp; Committee Control - Programmer Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  
   <style>
     :root {
-      /* Theme palette - Modern Diplomatic Executive Blue Tone */
       --bg-gradient: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #0d1322 100%);
-      --bg: #0b0f19;
-      --card: rgba(23, 31, 48, 0.75);
+      --card: rgba(23, 31, 48, 0.8);
       --card-solid: #171f30;
-      --card-hover: rgba(30, 41, 64, 0.85);
       --text: #f3f4f6;
       --muted: #9ca3af;
       --accent: #3b82f6;
       --accent-glow: rgba(59, 130, 246, 0.25);
-      --border: rgba(255, 255, 255, 0.08);
-      --border-accent: rgba(59, 130, 246, 0.3);
+      --border: rgba(255, 255, 255, 0.09);
+      --border-accent: rgba(59, 130, 246, 0.35);
       --track: rgba(255, 255, 255, 0.06);
       --danger: #ef4444;
-      --danger-bg: rgba(239, 68, 68, 0.1);
-      
-      /* Level Indicators */
-      --c1: #3b82f6; /* Intermediate / Accent */
-      --c2: #f59e0b; /* Beginners / Warning */
-      --c3: #10b981; /* Experienced / Success */
-      --c4: #8b5cf6; /* Special Accent */
-
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.35);
-      --glass-blur: blur(16px);
-      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --danger-bg: rgba(239, 68, 68, 0.14);
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.14);
+      --warn: #f59e0b;
+      --warn-bg: rgba(245, 158, 11, 0.14);
+      --c1: #3b82f6; --c2: #f59e0b; --c3: #10b981;
     }
-
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
-        --bg: #f8fafc;
-        --card: rgba(255, 255, 255, 0.85);
-        --card-solid: #ffffff;
-        --card-hover: rgba(255, 255, 255, 0.98);
-        --text: #0f172a;
-        --muted: #64748b;
-        --accent: #2563eb;
-        --accent-glow: rgba(37, 99, 235, 0.15);
-        --border: rgba(0, 0, 0, 0.07);
-        --border-accent: rgba(37, 99, 235, 0.25);
-        --track: rgba(0, 0, 0, 0.06);
-        --danger: #dc2626;
-        --danger-bg: rgba(220, 38, 38, 0.08);
-
-        --c1: #2563eb;
-        --c2: #d97706;
-        --c3: #059669;
-        --c4: #7c3aed;
-
-        --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.04);
-        --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.06);
-      }
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       background: var(--bg-gradient);
       color: var(--text);
       min-height: 100vh;
-      padding: 0 0 60px 0;
+      padding-bottom: 64px;
       line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
     }
-
-    /* Top Navigation Bar */
     .navbar-outer {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--card);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 32px;
-      box-shadow: var(--shadow-sm);
+      position: sticky; top: 0; z-index: 100;
+      background: var(--card); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border); margin-bottom: 28px;
     }
-
     .navbar {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 12px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      max-width: 1220px; margin: 0 auto; padding: 12px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 800;
-      font-size: 1.15rem;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      text-decoration: none;
-    }
-
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.12rem; color: var(--text); text-decoration: none; }
     .brand-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--accent) 0%, #1d4ed8 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 1.25rem;
-      box-shadow: 0 4px 12px var(--accent-glow);
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem;
     }
-
-    nav {
-      display: flex;
-      gap: 6px;
-      background: var(--track);
-      padding: 4px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-
+    nav { display: flex; gap: 6px; background: var(--track); padding: 4px; border-radius: 12px; border: 1px solid var(--border); flex-wrap: wrap; }
     nav a {
-      padding: 8px 16px;
-      border-radius: 8px;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 600;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      padding: 8px 14px; border-radius: 8px; color: var(--muted); text-decoration: none;
+      font-size: 0.86rem; font-weight: 600; display: flex; align-items: center; gap: 6px;
     }
+    nav a:hover { color: var(--text); }
+    nav a.on { background: var(--card-solid); color: var(--text); border: 1px solid var(--border); }
+    main { max-width: 1220px; margin: 0 auto; padding: 0 24px; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; gap: 14px; flex-wrap: wrap; }
+    h1 { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; }
+    .sub { color: var(--muted); font-size: 0.9rem; }
 
-    nav a:hover {
-      color: var(--text);
+    button {
+      font-family: inherit; font-size: 0.84rem; font-weight: 600; padding: 8px 14px;
+      border-radius: 9px; border: 1px solid var(--border); background: var(--card-solid);
+      color: var(--text); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+      transition: all 0.2s;
     }
+    button:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--border-accent); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.primary { background: linear-gradient(135deg, var(--accent), #1d4ed8); color: #fff; border-color: var(--border-accent); }
+    button.success { background: var(--success-bg); color: var(--success); border-color: rgba(16,185,129,0.35); }
+    button.success:hover:not(:disabled) { background: var(--success); color: #fff; }
+    button.danger { background: var(--danger-bg); color: var(--danger); border-color: rgba(239,68,68,0.3); }
+    button.danger:hover:not(:disabled) { background: var(--danger); color: #fff; }
+    button.small { padding: 5px 10px; font-size: 0.78rem; border-radius: 8px; }
+    button.active-tab { border-color: var(--accent); background: var(--accent-glow); color: #fff; }
 
-    nav a.on {
-      background: var(--card-solid);
-      color: var(--text);
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border);
+    #banner {
+      display: none; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 12px;
+      margin-bottom: 20px; font-size: 0.9rem; font-weight: 600;
     }
+    #banner.ok { display: flex; background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.3); }
+    #banner.err { display: flex; background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
 
-    /* Main Container */
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    .grid { display: grid; gap: 18px; margin-bottom: 20px; }
+    .stats { grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); }
+    .two { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
 
-    /* Header Section */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 28px;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .header-title h1 {
-      font-size: 1.75rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.2;
-    }
-
-    .header-title .sub {
-      color: var(--muted);
-      font-size: 0.92rem;
-      margin-top: 4px;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--card);
-      backdrop-filter: var(--glass-blur);
-      padding: 6px 6px 6px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-
-    .sub {
-      color: var(--muted);
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-
-    button#refresh {
-      font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 600;
-      padding: 8px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--border-accent);
-      background: linear-gradient(135deg, var(--accent) 0%, #1d4ed8 100%);
-      color: #ffffff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: var(--transition);
-      box-shadow: 0 2px 8px var(--accent-glow);
-    }
-
-    button#refresh:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px var(--accent-glow);
-      opacity: 0.95;
-    }
-
-    button#refresh:active {
-      transform: translateY(0);
-    }
-
-    button#refresh .ph {
-      font-size: 1rem;
-      transition: transform 0.5s ease;
-    }
-
-    button#refresh.loading .ph {
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Error Alert Box */
-    #err {
-      color: var(--danger);
-      background: var(--danger-bg);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin-bottom: 24px;
-      font-size: 0.9rem;
-      display: none;
-      align-items: center;
-      gap: 8px;
-    }
-
-    #err:not(:empty) {
-      display: flex;
-    }
-
-    /* Grid Layouts */
-    .grid {
-      display: grid;
-      gap: 20px;
-    }
-
-    .stats {
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      margin-bottom: 20px;
-    }
-
-    .two {
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      margin-bottom: 20px;
-    }
-
-    /* Cards */
     .card {
-      background: var(--card);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 22px;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card:hover {
-      border-color: rgba(255, 255, 255, 0.15);
-    }
-
-    .card h2 {
-      margin: 0 0 16px;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: var(--text);
-    }
-
-    /* Stat Cards */
-    .card.stat {
-      padding: 18px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .card.stat .stat-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .stat .label {
-      color: var(--muted);
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .stat .icon-wrapper {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: var(--track);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent);
-      font-size: 1.1rem;
-    }
-
-    .stat .value {
-      font-size: 2.1rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      line-height: 1;
-    }
-
-    /* Experience Stacked Bar */
-    .stack {
-      display: flex;
-      height: 16px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: var(--track);
+      background: var(--card); backdrop-filter: blur(16px);
+      border: 1px solid var(--border); border-radius: 16px; padding: 20px;
       margin-bottom: 20px;
-      padding: 2px;
-      border: 1px solid var(--border);
     }
-
-    .stack > div {
-      height: 100%;
-      border-radius: 999px;
-      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    .grid .card { margin-bottom: 0; }
+    .card h2 {
+      font-size: 1.02rem; font-weight: 800; margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
     }
+    .stat .label { color: var(--muted); font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .stat .value { font-size: 1.95rem; font-weight: 800; line-height: 1; }
 
-    .legend {
-      display: flex;
-      flex-direction: column;
+    /* Committee Menu Grid (Mirrors C++ committeemenu.h 1-9) */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
       gap: 10px;
-      font-size: 0.88rem;
+      margin-bottom: 18px;
     }
-
-    .legend div {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--track);
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.02);
+    .menu-btn {
+      display: flex; align-items: center; gap: 10px; text-align: left;
+      padding: 12px 14px; border-radius: 12px;
+      background: var(--track); border: 1px solid var(--border);
+      color: var(--text); cursor: pointer; transition: all 0.2s;
     }
-
-    .legend-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .menu-btn:hover { border-color: var(--accent); background: rgba(59,130,246,0.1); transform: translateY(-1px); }
+    .menu-btn.danger-tile:hover { border-color: var(--danger); background: var(--danger-bg); }
+    .menu-btn.active-view { border-color: var(--accent); background: var(--accent-glow); }
+    .menu-num {
+      width: 26px; height: 26px; border-radius: 7px; flex: none;
+      background: var(--card-solid); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.76rem; font-weight: 800; color: var(--accent);
     }
+    .menu-btn.danger-tile .menu-num { color: var(--danger); }
+    .menu-text strong { display: block; font-size: 0.85rem; font-weight: 700; line-height: 1.25; }
+    .menu-text span { display: block; font-size: 0.74rem; color: var(--muted); }
 
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex: none;
-      box-shadow: 0 0 8px currentColor;
-    }
-
-    /* Horizontal Progress Bars */
-    .bar {
+    .view-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--border);
       margin-bottom: 14px;
     }
+    .view-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    .bar:last-child {
-      margin-bottom: 0;
-    }
+    .table-wrap { overflow-x: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 10px 12px; font-size: 0.86rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    th { color: var(--muted); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: var(--track); }
+    tr:last-child td { border-bottom: 0; }
+    td.num, th.num { text-align: right; }
 
-    .bar .top {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.88rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      gap: 8px;
-    }
+    .badge { display: inline-flex; padding: 3px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
+    .badge.open { background: var(--success-bg); color: var(--success); }
+    .badge.full { background: var(--warn-bg); color: var(--warn); }
+    .badge.none { background: var(--track); color: var(--muted); }
 
-    .bar .top span:first-child {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      color: var(--text);
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px; border-radius: 999px; font-size: 0.78rem; font-weight: 600;
+      background: var(--track); border: 1px solid var(--border); margin: 2px 4px 2px 0;
     }
+    .chip button {
+      padding: 0 4px; border: 0; background: transparent; color: var(--muted);
+      font-size: 0.85rem; line-height: 1;
+    }
+    .chip button:hover { color: var(--danger); transform: none; }
 
-    .bar .top span:last-child {
-      color: var(--muted);
-      font-feature-settings: "tnum";
-    }
+    .stack { display: flex; height: 14px; border-radius: 999px; overflow: hidden; background: var(--track); margin-bottom: 16px; }
+    .legend { display: flex; flex-direction: column; gap: 8px; font-size: 0.86rem; }
+    .legend div { display: flex; justify-content: space-between; background: var(--track); padding: 7px 12px; border-radius: 9px; }
+    .bar { margin-bottom: 12px; }
+    .bar .top { display: flex; justify-content: space-between; font-size: 0.86rem; font-weight: 600; margin-bottom: 5px; }
+    .track { background: var(--track); border-radius: 999px; height: 9px; overflow: hidden; }
+    .fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), #60a5fa); }
+    .empty { color: var(--muted); font-style: italic; text-align: center; padding: 18px 0; }
+    .section-sub { font-size: 0.82rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 16px 0 8px; }
 
-    .track {
-      background: var(--track);
-      border-radius: 999px;
-      height: 10px;
-      overflow: hidden;
-      padding: 1px;
+    /* Modals */
+    dialog {
+      border: 1px solid var(--border); border-radius: 18px; background: var(--card-solid); color: var(--text);
+      padding: 24px; width: min(480px, 92vw); margin: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
-
-    .fill {
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--accent) 0%, #60a5fa 100%);
-      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    dialog::backdrop { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+    dialog h3 { font-size: 1.12rem; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin: 12px 0 5px; }
+    input, select {
+      width: 100%; padding: 10px 12px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--track); color: var(--text);
+      font-family: inherit; font-size: 0.9rem; outline: none;
     }
-
-    /* Tables */
-    .table-container {
-      overflow-x: auto;
-      border-radius: 12px;
+    input:focus, select:focus { border-color: var(--accent); }
+    select option { background: var(--card-solid); color: var(--text); }
+    .dlg-err { color: var(--danger); font-size: 0.84rem; margin-top: 10px; min-height: 1.1em; }
+    .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--track); padding: 4px; border-radius: 10px; margin-bottom: 12px; border: 1px solid var(--border); }
+    .mode-switch button { justify-content: center; border: 0; background: transparent; color: var(--muted); padding: 7px; }
+    .mode-switch button.on { background: var(--card-solid); color: var(--text); border: 1px solid var(--border); }
+    .info-box {
+      margin-top: 14px; padding: 14px; border-radius: 12px;
+      background: var(--track); border: 1px solid var(--border); font-size: 0.88rem;
     }
-
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-    }
-
-    td, th {
-      text-align: left;
-      padding: 12px 12px;
-      font-size: 0.88rem;
-    }
-
-    th {
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      border-bottom: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.02);
-    }
-
-    td {
-      border-bottom: 1px solid var(--border);
-      color: var(--text);
-      font-weight: 500;
-      transition: var(--transition);
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    tr:hover td {
-      background: var(--track);
-    }
-
-    td.num {
-      text-align: right;
-      font-weight: 700;
-      font-feature-settings: "tnum";
-      color: var(--accent);
-    }
-
-    /* Badge Pills inside tables */
-    .badge-country {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 2px 8px;
-      background: var(--track);
-      border-radius: 6px;
-      font-size: 0.8rem;
-      color: var(--muted);
-      border: 1px solid var(--border);
-    }
-
-    .empty {
-      color: var(--muted);
-      font-size: 0.88rem;
-      text-align: center;
-      padding: 24px 0;
-      font-style: italic;
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 640px) {
-      body { padding-bottom: 30px; }
-      .navbar { padding: 12px 16px; }
-      main { padding: 0 16px; }
-      header { flex-direction: column; align-items: flex-start; }
-      .header-actions { width: 100%; justify-content: space-between; }
-      .stats { grid-template-columns: repeat(2, 1fr); }
-      .two { grid-template-columns: 1fr; }
-    }
+    .info-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); }
+    .info-row:last-child { border-bottom: 0; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
@@ -540,255 +206,984 @@
   <div class="navbar">
     <a href="/dashboard.html" class="brand">
       <div class="brand-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
-      <span>MUN Portal</span>
+      <span>MUN Programmer Portal</span>
     </a>
     <nav>
-      <a href="/dashboard.html" class="on" id="nav-dashboard"><i class="ph ph-squares-four"></i> Dashboard</a>
-      <a href="/delegates.html" id="nav-delegates"><i class="ph ph-users-three"></i> Delegates</a>
-      <a href="/" id="nav-cv"><i class="ph ph-file-magnifying-glass"></i> CV Analyzer</a>
+      <a href="/dashboard.html" class="on"><i class="ph ph-squares-four"></i> Dashboard</a>
+      <a href="/delegates.html"><i class="ph ph-users-three"></i> Delegates</a>
+      <a href="/committees.html"><i class="ph ph-buildings"></i> Committees & Requests</a>
+      <a href="/index.html"><i class="ph ph-file-magnifying-glass"></i> CV Analyzer</a>
     </nav>
+    <button id="btnLogout" class="danger"><i class="ph ph-sign-out"></i> Logout</button>
   </div>
 </div>
 
 <main>
   <header>
-    <div class="header-title">
-      <h1>MUN Management System</h1>
-      <div class="sub">Executive analytics & delegate overview</div>
+    <div>
+      <h1>Executive Dashboard &amp; Committee Control</h1>
+      <div class="sub">Analytics overview plus all Committee &amp; Portfolio Management operations in one place</div>
     </div>
-    <div class="header-actions">
-      <span class="sub" id="updated">Awaiting sync...</span>
-      <button id="refresh">
-        <i class="ph ph-arrows-clockwise"></i>
-        <span>Refresh</span>
-      </button>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="sub" id="updated">Syncing...</span>
+      <button id="refresh" class="primary"><i class="ph ph-arrows-clockwise"></i> Refresh</button>
     </div>
   </header>
 
-  <div id="err"></div>
+  <div id="banner"></div>
 
+  <!-- Top KPI Stats -->
   <div class="grid stats" id="stats"></div>
 
+  <!-- =========================================================
+       COMPLETE COMMITTEE & PORTFOLIO MENU (All C++ Menu Options)
+       ========================================================= -->
+  <div class="card">
+    <h2><i class="ph ph-sliders-horizontal" style="color:var(--accent)"></i> Committee &amp; Portfolio Management Menu</h2>
+
+    <div class="menu-grid">
+      <button type="button" class="menu-btn" id="mAddComm">
+        <span class="menu-num">1</span>
+        <span class="menu-text"><strong>Add Committee</strong><span>Create committee &amp; eligibility</span></span>
+      </button>
+
+      <button type="button" class="menu-btn" id="mAddPort">
+        <span class="menu-num">2</span>
+        <span class="menu-text"><strong>Add Portfolio</strong><span>Add country/role with capacity</span></span>
+      </button>
+
+      <button type="button" class="menu-btn" id="mSetCap">
+        <span class="menu-num">3</span>
+        <span class="menu-text"><strong>Set Portfolio Capacity</strong><span>Adjust seat count safely</span></span>
+      </button>
+
+      <button type="button" class="menu-btn" id="mCheckAvail">
+        <span class="menu-num">4</span>
+        <span class="menu-text"><strong>Check Availability</strong><span>Inspect specific portfolio seats</span></span>
+      </button>
+
+      <button type="button" class="menu-btn" id="mAlloc">
+        <span class="menu-num">5</span>
+        <span class="menu-text"><strong>Allocate / Deallocate</strong><span>Assign or remove delegate seat</span></span>
+      </button>
+
+      <button type="button" class="menu-btn" id="mUpdate">
+        <span class="menu-num">6</span>
+        <span class="menu-text"><strong>Update Comm / Port</strong><span>Rename or change limits</span></span>
+      </button>
+
+      <button type="button" class="menu-btn danger-tile" id="mDelete">
+        <span class="menu-num">7</span>
+        <span class="menu-text"><strong>Delete Comm / Port</strong><span>Remove committee or portfolio</span></span>
+      </button>
+
+      <button type="button" class="menu-btn" id="mDispAvail">
+        <span class="menu-num">8</span>
+        <span class="menu-text"><strong>Available Portfolios</strong><span>Display all vacant seats</span></span>
+      </button>
+
+      <button type="button" class="menu-btn active-view" id="mDispAll">
+        <span class="menu-num">9</span>
+        <span class="menu-text"><strong>Display All Committees</strong><span>Summary &amp; allocation matrix</span></span>
+      </button>
+    </div>
+
+    <div class="view-bar">
+      <div class="view-tabs">
+        <button type="button" class="small active-tab" id="tabAll">All Committees &amp; Matrix (9)</button>
+        <button type="button" class="small" id="tabAvail">Available Portfolios Only (8)</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button type="button" class="small success" id="btnAutoAlloc"><i class="ph ph-sparkle"></i> Auto-Allocate</button>
+        <a href="/committees.html" style="text-decoration:none;">
+          <button type="button" class="small"><i class="ph ph-bell-ringing"></i> Manage Delegate Requests</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- View 9: All Committees Summary + Portfolio & Delegate Matrix -->
+    <div id="viewAllWrap">
+      <div class="section-sub">Committee Summary</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Committee Name</th>
+              <th>Min. Eligibility</th>
+              <th>Total Seats</th>
+              <th>Seats Filled</th>
+              <th>Seats Left</th>
+            </tr>
+          </thead>
+          <tbody id="dashCommSummary"></tbody>
+        </table>
+      </div>
+
+      <div class="section-sub">Portfolio &amp; Delegate Matrix</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Committee</th>
+              <th>Portfolio</th>
+              <th>Capacity</th>
+              <th>Status</th>
+              <th>Allocated Delegate(s)</th>
+            </tr>
+          </thead>
+          <tbody id="dashMatrixBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- View 8: Available Portfolios Only -->
+    <div id="viewAvailWrap" class="hidden">
+      <div class="section-sub">Available (Open) Portfolios</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Committee</th>
+              <th>Available Portfolio</th>
+              <th>Min. MUNs</th>
+              <th>Capacity</th>
+              <th>Seats Left</th>
+              <th>Status</th>
+              <th style="text-align:right;">Quick Action</th>
+            </tr>
+          </thead>
+          <tbody id="dashAvailBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analytics Section -->
   <div class="grid two">
     <div class="card">
-      <h2><span style="display:flex;align-items:center;gap:8px;"><i class="ph ph-chart-pie-slice" style="color:var(--accent)"></i> Experience levels</span></h2>
+      <h2><i class="ph ph-chart-pie-slice" style="color:var(--accent)"></i> Experience Levels</h2>
       <div class="stack" id="stack"></div>
       <div class="legend" id="legend"></div>
     </div>
     <div class="card">
-      <h2><span style="display:flex;align-items:center;gap:8px;"><i class="ph ph-flag-banner" style="color:var(--accent)"></i> Top countries</span></h2>
+      <h2><i class="ph ph-flag-banner" style="color:var(--accent)"></i> Top Countries</h2>
       <div id="countries"></div>
     </div>
   </div>
 
   <div class="grid two">
     <div class="card">
-      <h2><span style="display:flex;align-items:center;gap:8px;"><i class="ph ph-buildings" style="color:var(--accent)"></i> Most common previous committees</span></h2>
+      <h2><i class="ph ph-buildings" style="color:var(--accent)"></i> Common Previous Committees</h2>
       <div id="committees"></div>
     </div>
     <div class="card">
-      <h2><span style="display:flex;align-items:center;gap:8px;"><i class="ph ph-medal" style="color:var(--accent)"></i> Most experienced delegates</span></h2>
-      <div class="table-container" id="experienced"></div>
+      <h2><i class="ph ph-medal" style="color:var(--accent)"></i> Most Experienced Delegates</h2>
+      <div id="experienced"></div>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom: 20px;">
-    <h2><span style="display:flex;align-items:center;gap:8px;"><i class="ph ph-user-plus" style="color:var(--accent)"></i> Recently added delegates</span></h2>
-    <div class="table-container" id="recent"></div>
+  <div class="card">
+    <h2><i class="ph ph-user-plus" style="color:var(--accent)"></i> Recently Added Delegates</h2>
+    <div id="recent"></div>
   </div>
 </main>
 
+<!-- ===================== MODALS FOR ALL 9 COMMITTEE MENU OPERATIONS ===================== -->
+
+<!-- 1. Add Committee -->
+<dialog id="dlgAddComm">
+  <form id="formAddComm">
+    <h3><i class="ph ph-plus-circle" style="color:var(--accent)"></i> 1. Add Committee</h3>
+    <label for="ac_name">Committee Name *</label>
+    <input id="ac_name" maxlength="100" placeholder="e.g. UNSC, UNHRC, DISEC" required>
+    <label for="ac_min">Minimum MUNs Required (Eligibility) *</label>
+    <input id="ac_min" type="number" min="0" value="0" required>
+    <div class="dlg-err" id="ac_err"></div>
+    <div class="dlg-actions">
+      <button type="button" onclick="closeDlg('dlgAddComm')">Cancel</button>
+      <button type="submit" class="primary">Add Committee</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 2. Add Portfolio -->
+<dialog id="dlgAddPort">
+  <form id="formAddPort">
+    <h3><i class="ph ph-briefcase" style="color:var(--accent)"></i> 2. Add Portfolio</h3>
+    <label for="ap_comm">Select Committee *</label>
+    <select id="ap_comm" required></select>
+    <label for="ap_name">Portfolio Name *</label>
+    <input id="ap_name" maxlength="100" placeholder="e.g. India, USA, France" required>
+    <label for="ap_cap">Capacity *</label>
+    <input id="ap_cap" type="number" min="1" value="1" required>
+    <div class="dlg-err" id="ap_err"></div>
+    <div class="dlg-actions">
+      <button type="button" onclick="closeDlg('dlgAddPort')">Cancel</button>
+      <button type="submit" class="primary">Add Portfolio</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 3. Set Portfolio Capacity -->
+<dialog id="dlgSetCap">
+  <form id="formSetCap">
+    <h3><i class="ph ph-gauge" style="color:var(--accent)"></i> 3. Set Portfolio Capacity</h3>
+    <label for="sc_comm">Select Committee *</label>
+    <select id="sc_comm" required></select>
+    <label for="sc_port">Select Portfolio *</label>
+    <select id="sc_port" required></select>
+    <div class="info-box" id="sc_info"></div>
+    <label for="sc_cap">New Capacity *</label>
+    <input id="sc_cap" type="number" min="1" required>
+    <div class="dlg-err" id="sc_err"></div>
+    <div class="dlg-actions">
+      <button type="button" onclick="closeDlg('dlgSetCap')">Cancel</button>
+      <button type="submit" class="primary">Update Capacity</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 4. Check Availability -->
+<dialog id="dlgCheckAvail">
+  <h3><i class="ph ph-magnifying-glass" style="color:var(--accent)"></i> 4. Check Portfolio Availability</h3>
+  <label for="ca_comm">Select Committee</label>
+  <select id="ca_comm"></select>
+  <label for="ca_port">Select Portfolio</label>
+  <select id="ca_port"></select>
+  <div class="info-box" id="ca_result"></div>
+  <div class="dlg-actions">
+    <button type="button" class="primary" onclick="closeDlg('dlgCheckAvail')">Close</button>
+  </div>
+</dialog>
+
+<!-- 5. Allocate / Deallocate Delegate -->
+<dialog id="dlgAlloc">
+  <h3><i class="ph ph-user-switch" style="color:var(--accent)"></i> 5. Allocate / Deallocate Delegate</h3>
+  <div class="mode-switch">
+    <button type="button" id="allocTabIn" class="on">Allocate Delegate</button>
+    <button type="button" id="allocTabOut">Deallocate Delegate</button>
+  </div>
+
+  <!-- Allocate Sub-Form -->
+  <form id="formAllocIn">
+    <label for="al_comm">Select Committee *</label>
+    <select id="al_comm" required></select>
+    <label for="al_port">Select Portfolio *</label>
+    <select id="al_port" required></select>
+    <label for="al_delSel">Pick Registered Delegate</label>
+    <select id="al_delSel"></select>
+    <label for="al_delName">Or Enter Delegate Name *</label>
+    <input id="al_delName" maxlength="100" placeholder="Delegate full name" required>
+    <div class="dlg-err" id="al_err"></div>
+    <div class="dlg-actions">
+      <button type="button" onclick="closeDlg('dlgAlloc')">Cancel</button>
+      <button type="submit" class="primary">Allocate Delegate</button>
+    </div>
+  </form>
+
+  <!-- Deallocate Sub-Form -->
+  <form id="formAllocOut" class="hidden">
+    <label for="da_comm">Select Committee *</label>
+    <select id="da_comm" required></select>
+    <label for="da_port">Select Portfolio *</label>
+    <select id="da_port" required></select>
+    <label for="da_alloc">Select Allocated Delegate to Remove *</label>
+    <select id="da_alloc" required></select>
+    <div class="dlg-err" id="da_err"></div>
+    <div class="dlg-actions">
+      <button type="button" onclick="closeDlg('dlgAlloc')">Cancel</button>
+      <button type="submit" class="danger">Deallocate Delegate</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 6. Update Committee / Portfolio -->
+<dialog id="dlgUpdate">
+  <h3><i class="ph ph-pencil-simple" style="color:var(--accent)"></i> 6. Update Committee / Portfolio</h3>
+  <div class="mode-switch">
+    <button type="button" id="updTabComm" class="on">Update Committee</button>
+    <button type="button" id="updTabPort">Update Portfolio</button>
+  </div>
+
+  <form id="formUpdComm">
+    <label for="uc_comm">Select Committee *</label>
+    <select id="uc_comm" required></select>
+    <label for="uc_name">New Committee Name *</label>
+    <input id="uc_name" maxlength="100" required>
+    <label for="uc_min">Minimum MUNs (Eligibility) *</label>
+    <input id="uc_min" type="number" min="0" required>
+    <div class="dlg-err" id="uc_err"></div>
+    <div class="dlg-actions">
+      <button type="button" onclick="closeDlg('dlgUpdate')">Cancel</button>
+      <button type="submit" class="primary">Save Committee</button>
+    </div>
+  </form>
+
+  <form id="formUpdPort" class="hidden">
+    <label for="up_comm">Select Committee *</label>
+    <select id="up_comm" required></select>
+    <label for="up_port">Select Portfolio *</label>
+    <select id="up_port" required></select>
+    <label for="up_name">New Portfolio Name *</label>
+    <input id="up_name" maxlength="100" required>
+    <label for="up_cap">New Capacity *</label>
+    <input id="up_cap" type="number" min="1" required>
+    <div class="dlg-err" id="up_err"></div>
+    <div class="dlg-actions">
+      <button type="button" onclick="closeDlg('dlgUpdate')">Cancel</button>
+      <button type="submit" class="primary">Save Portfolio</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 7. Delete Committee / Portfolio -->
+<dialog id="dlgDelete">
+  <h3><i class="ph ph-trash" style="color:var(--danger)"></i> 7. Delete Committee / Portfolio</h3>
+  <div class="mode-switch">
+    <button type="button" id="delTabComm" class="on">Delete Committee</button>
+    <button type="button" id="delTabPort">Delete Portfolio</button>
+  </div>
+
+  <form id="formDelComm">
+    <label for="dc_comm">Select Committee to Delete *</label>
+    <select id="dc_comm" required></select>
+    <div class="info-box" id="dc_warn" style="color:var(--warn);">Deleting a committee cascades and removes all its portfolios and allocations.</div>
+    <div class="dlg-err" id="dc_err"></div>
+    <div class="dlg-actions">
+      <button type="button" onclick="closeDlg('dlgDelete')">Cancel</button>
+      <button type="submit" class="danger">Delete Committee</button>
+    </div>
+  </form>
+
+  <form id="formDelPort" class="hidden">
+    <label for="dp_comm">Select Committee *</label>
+    <select id="dp_comm" required></select>
+    <label for="dp_port">Select Portfolio to Delete *</label>
+    <select id="dp_port" required></select>
+    <div class="info-box" id="dp_warn"></div>
+    <div class="dlg-err" id="dp_err"></div>
+    <div class="dlg-actions">
+      <button type="button" onclick="closeDlg('dlgDelete')">Cancel</button>
+      <button type="submit" class="danger">Delete Portfolio</button>
+    </div>
+  </form>
+</dialog>
+
 <script>
 const $ = (id) => document.getElementById(id);
+const el = (t, c, txt) => { const e = document.createElement(t); if (c) e.className = c; if (txt !== undefined) e.textContent = txt; return e; };
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 
-function el(tag, cls, text) {
-  const e = document.createElement(tag);
-  if (cls) e.className = cls;
-  if (text !== undefined) e.textContent = text;
-  return e;
+let state = { committees: [], delegates: [], view: "all" };
+
+function closeDlg(id) { $(id).close(); }
+
+function showBanner(msg, isErr) {
+  const b = $("banner");
+  if (!msg) { b.className = ""; b.textContent = ""; return; }
+  b.className = isErr ? "err" : "ok";
+  b.replaceChildren(
+    el("i", isErr ? "ph ph-warning-circle" : "ph ph-check-circle"),
+    document.createTextNode(" " + msg)
+  );
 }
 
-// Stat icon mapping for enhanced visuals
-const statIcons = [
-  "ph-users-three", "ph-globe-stand", "ph-chart-line-up", 
-  "ph-certificate", "ph-trophy", "ph-user-list"
-];
+async function api(url, opts) {
+  const res = await fetch(url, opts);
+  if (res.status === 401 || res.status === 403) { window.location.href = "/login.html"; throw new Error("Unauthorized"); }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Server error (${res.status})`);
+  return data;
+}
+const jsonOpts = (method, body) => ({ method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
 
+// ---------------- Dashboard Analytics Rendering ----------------
 function renderStats(t) {
   const items = [
-    ["Delegates", t.delegates], ["Countries", t.countries], ["Avg MUNs each", t.avg_muns],
-    ["Total MUNs", t.total_muns], ["Awards", t.awards], ["Avg age", t.avg_age],
+    ["Delegates", t.delegates], ["Countries", t.countries], ["Committees", t.committees],
+    ["Open Seats", t.seats_left], ["Pending Requests", t.pending_requests], ["Awards", t.awards]
   ];
-  $("stats").replaceChildren(...items.map(([l, v], idx) => {
+  $("stats").replaceChildren(...items.map(([l, v]) => {
     const c = el("div", "card stat");
-    
-    const header = el("div", "stat-header");
-    header.append(
-      el("div", "label", l),
-      (() => {
-        const wrap = el("div", "icon-wrapper");
-        const icon = el("i", `ph ${statIcons[idx % statIcons.length]}`);
-        wrap.appendChild(icon);
-        return wrap;
-      })()
-    );
-    
-    c.append(header, el("div", "value", v !== undefined ? v : "0"));
+    c.append(el("div", "label", l), el("div", "value", String(v ?? 0)));
+    if (l === "Pending Requests" && Number(v) > 0) {
+      c.style.cursor = "pointer";
+      c.style.borderColor = "rgba(245,158,11,0.55)";
+      c.title = "Click to review delegate requests";
+      c.onclick = () => window.location.href = "/committees.html";
+    }
     return c;
   }));
 }
 
 function renderExperience(x, total) {
   const parts = [
-    ["Beginners (0-2 MUNs)", x.beginners || 0, "var(--c2)"],
+    ["Beginners (0-2)", x.beginners || 0, "var(--c2)"],
     ["Intermediate (3-6)", x.intermediate || 0, "var(--c1)"],
-    ["Experienced (7+)", x.experienced || 0, "var(--c3)"],
+    ["Experienced (7+)", x.experienced || 0, "var(--c3)"]
   ];
-  
-  // FIXED SYNTAX: (n / total * 100)
-  $("stack").replaceChildren(...parts.filter((p) => p[1] > 0).map(([, n, color]) => {
-    const s = el("div"); 
-    s.style.width = ((n / total) * 100) + "%"; 
-    s.style.background = color; 
-    return s;
+  $("stack").replaceChildren(...parts.filter(p => p[1] > 0).map(([, n, col]) => {
+    const s = el("div"); s.style.width = ((n / total) * 100) + "%"; s.style.background = col; return s;
   }));
-  
-  $("legend").replaceChildren(...parts.map(([label, n, color]) => {
-    const row = el("div"); 
-    const info = el("div", "legend-info");
-    const dot = el("span", "dot"); 
-    dot.style.background = color;
-    dot.style.color = color;
-    info.append(dot, el("span", "", label));
-    
-    const count = el("span", "", n.toString());
-    count.style.fontWeight = "700";
-    count.style.fontFeatureSettings = '"tnum"';
-    
-    row.append(info, count);
-    return row;
+  $("legend").replaceChildren(...parts.map(([l, n]) => {
+    const r = el("div"); r.append(el("span", "", l), el("strong", "", String(n))); return r;
   }));
 }
 
 function renderBars(id, rows) {
   const box = $(id);
-  if (!rows || !rows.length) { box.replaceChildren(el("div", "empty", "No data yet.")); return; }
-  const max = Math.max(...rows.map((r) => r.value), 1);
-  box.replaceChildren(...rows.map((r) => {
-    const wrap = el("div", "bar");
-    const top = el("div", "top"); 
-    top.append(el("span", "", r.label), el("span", "", r.value));
-    
-    const track = el("div", "track"); 
-    const fill = el("div", "fill"); 
-    // FIXED SYNTAX: (r.value / max * 100)
-    fill.style.width = ((r.value / max) * 100) + "%";
-    
-    track.appendChild(fill); 
-    wrap.append(top, track);
-    return wrap;
+  if (!rows || !rows.length) return box.replaceChildren(el("div", "empty", "No data yet."));
+  const max = Math.max(...rows.map(r => r.value), 1);
+  box.replaceChildren(...rows.map(r => {
+    const w = el("div", "bar"), top = el("div", "top"), tr = el("div", "track"), f = el("div", "fill");
+    top.append(el("span", "", r.label), el("span", "", String(r.value)));
+    f.style.width = ((r.value / max) * 100) + "%";
+    tr.appendChild(f); w.append(top, tr); return w;
   }));
 }
 
 function renderTable(id, rows) {
   const box = $(id);
-  if (!rows || !rows.length) { box.replaceChildren(el("div", "empty", "No delegates yet.")); return; }
-  const table = el("table");
-  const head = el("tr");
-  ["Name", "Country", "MUNs"].forEach((h, i) => { const th = el("th", i === 2 ? "num" : "", h); head.appendChild(th); });
-  table.appendChild(head);
-  rows.forEach((r) => {
+  if (!rows || !rows.length) return box.replaceChildren(el("div", "empty", "No delegates yet."));
+  const tbl = el("table"), hr = el("tr");
+  ["Name", "Country", "MUNs"].forEach((h, i) => hr.appendChild(el("th", i === 2 ? "num" : "", h)));
+  tbl.appendChild(hr);
+  rows.forEach(r => {
     const tr = el("tr");
-    
-    const tdName = el("td", "", r.name);
-    tdName.style.fontWeight = "600";
-    
-    const tdCountry = el("td");
-    const countryBadge = el("span", "badge-country", r.country);
-    tdCountry.appendChild(countryBadge);
-    
-    const tdMun = el("td", "num", r.mun_attend);
-    
-    tr.append(tdName, tdCountry, tdMun);
-    table.appendChild(tr);
+    tr.append(el("td", "", r.name), el("td", "", r.country), el("td", "num", String(r.mun_attend)));
+    tbl.appendChild(tr);
   });
-  box.replaceChildren(table);
+  box.replaceChildren(tbl);
 }
 
-// Fallback dynamic mock data generator for seamless previewing when offline/no API server
-function getMockData() {
-  return {
-    totals: { delegates: 142, countries: 28, avg_muns: 4.8, total_muns: 681, awards: 39, avg_age: 19.4 },
-    experience: { beginners: 38, intermediate: 64, experienced: 40 },
-    top_countries: [
-      { label: "United States", value: 34 },
-      { label: "United Kingdom", value: 22 },
-      { label: "Germany", value: 18 },
-      { label: "India", value: 15 },
-      { label: "France", value: 12 }
-    ],
-    top_committees: [
-      { label: "UN Security Council (UNSC)", value: 45 },
-      { label: "DISEC", value: 38 },
-      { label: "SOCHUM", value: 29 },
-      { label: "UN Human Rights Council", value: 21 },
-      { label: "ECOFIN", value: 14 }
-    ],
-    most_experienced: [
-      { name: "Eleanor Vance", country: "United Kingdom", mun_attend: 18 },
-      { name: "Alexander Wright", country: "United States", mun_attend: 15 },
-      { name: "Sophia Chen", country: "Canada", mun_attend: 14 },
-      { name: "Marcus Thorne", country: "Germany", mun_attend: 12 }
-    ],
-    recent_delegates: [
-      { name: "Aria Sharma", country: "India", mun_attend: 3 },
-      { name: "Lucas Dubois", country: "France", mun_attend: 6 },
-      { name: "Elena Rostova", country: "Russia", mun_attend: 1 },
-      { name: "Kenji Sato", country: "Japan", mun_attend: 4 }
-    ]
-  };
+// ---------------- Committee Views (Options 8 & 9) ----------------
+function setCommitteeView(view) {
+  state.view = view;
+  const isAll = view === "all";
+  $("viewAllWrap").classList.toggle("hidden", !isAll);
+  $("viewAvailWrap").classList.toggle("hidden", isAll);
+  $("tabAll").classList.toggle("active-tab", isAll);
+  $("tabAvail").classList.toggle("active-tab", !isAll);
+  $("mDispAll").classList.toggle("active-view", isAll);
+  $("mDispAvail").classList.toggle("active-view", !isAll);
 }
 
-async function load() {
-  const errBox = $("err");
-  const refreshBtn = $("refresh");
-  errBox.textContent = "";
-  refreshBtn.classList.add("loading");
-  
-  try {
-    let d;
-    try {
-      const res = await fetch("/api/dashboard");
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || `Server status ${res.status}`);
-      }
-      d = await res.json();
-    } catch (fetchError) {
-      // If live API request fails (e.g., in canvas preview environment), fallback gracefully to interactive mock data
-      console.warn("Backend API unavailable, using interactive preview dataset:", fetchError.message);
-      d = getMockData();
+function renderCommitteeViews() {
+  // 9a. Committee Summary Table
+  const sumBody = $("dashCommSummary");
+  if (!state.committees.length) {
+    sumBody.innerHTML = '<tr><td colspan="6" class="empty">No committees available. Use Option 1 (Add Committee) above.</td></tr>';
+  } else {
+    sumBody.innerHTML = state.committees.map((c, idx) => `
+      <tr>
+        <td>${idx + 1}</td>
+        <td><strong>${esc(c.name)}</strong></td>
+        <td><span class="badge open">${c.min_muns}+ MUNs</span></td>
+        <td>${c.total_seats}</td>
+        <td>${c.filled_seats}</td>
+        <td><span class="badge ${c.seats_left > 0 ? "open" : "full"}">${c.seats_left} left</span></td>
+      </tr>
+    `).join("");
+  }
+
+  // 9b. Portfolio & Delegate Allocation Matrix
+  const matBody = $("dashMatrixBody");
+  matBody.innerHTML = "";
+  let matrixRows = 0;
+  state.committees.forEach((c) => {
+    if (!c.portfolios.length) {
+      matrixRows++;
+      const tr = el("tr");
+      tr.innerHTML = `
+        <td><strong>${esc(c.name)}</strong></td>
+        <td style="color:var(--muted);font-style:italic;">[No Portfolios]</td>
+        <td>-</td>
+        <td><span class="badge none">N/A</span></td>
+        <td style="color:var(--muted);">-</td>
+      `;
+      matBody.appendChild(tr);
+      return;
     }
+    c.portfolios.forEach((p) => {
+      matrixRows++;
+      const tr = el("tr");
+      tr.innerHTML = `
+        <td><strong>${esc(c.name)}</strong></td>
+        <td>${esc(p.name)}</td>
+        <td>${p.filled} / ${p.capacity}</td>
+        <td><span class="badge ${p.available > 0 ? "open" : "full"}">${p.available > 0 ? "OPEN" : "FULL"}</span></td>
+      `;
+      const tdAll = el("td");
+      if (!p.allocations.length) {
+        tdAll.innerHTML = '<span style="color:var(--muted);">Unassigned</span>';
+      } else {
+        p.allocations.forEach((a) => {
+          const chip = el("span", "chip");
+          chip.appendChild(document.createTextNode(a.delegate_name));
+          const rm = el("button", "");
+          rm.type = "button";
+          rm.title = `Deallocate ${a.delegate_name}`;
+          rm.innerHTML = "&times;";
+          rm.onclick = async () => {
+            if (!confirm(`Deallocate '${a.delegate_name}' from '${p.name}'?`)) return;
+            try {
+              await api(`/api/allocations/${a.id}`, { method: "DELETE" });
+              showBanner(`Deallocated '${a.delegate_name}' from '${p.name}'.`, false);
+              load();
+            } catch (e) { showBanner(e.message, true); }
+          };
+          chip.appendChild(rm);
+          tdAll.appendChild(chip);
+        });
+      }
+      tr.appendChild(tdAll);
+      matBody.appendChild(tr);
+    });
+  });
+  if (!matrixRows) {
+    matBody.innerHTML = '<tr><td colspan="5" class="empty">No committees or portfolios yet.</td></tr>';
+  }
 
-    renderStats(d.totals);
-    renderExperience(d.experience, Math.max(d.totals.delegates, 1));
-    renderBars("countries", d.top_countries);
-    renderBars("committees", d.top_committees);
-    renderTable("experienced", d.most_experienced);
-    renderTable("recent", d.recent_delegates);
-    
-    $("updated").textContent = "Updated " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  } catch (e) { 
-    errBox.replaceChildren(
-      (() => { const i = el("i", "ph ph-warning-circle"); return i; })(),
-      document.createTextNode(" " + e.message)
-    ); 
-  } finally {
-    setTimeout(() => refreshBtn.classList.remove("loading"), 400);
+  // 8. Available Portfolios Only
+  const avBody = $("dashAvailBody");
+  avBody.innerHTML = "";
+  let openCount = 0;
+  state.committees.forEach((c) => {
+    c.portfolios.forEach((p) => {
+      if (p.available <= 0) return;
+      openCount++;
+      const tr = el("tr");
+      tr.innerHTML = `
+        <td><strong>${esc(c.name)}</strong></td>
+        <td>${esc(p.name)}</td>
+        <td>${c.min_muns}+ MUNs</td>
+        <td>${p.capacity}</td>
+        <td><strong>${p.available}</strong></td>
+        <td><span class="badge open">OPEN</span></td>
+      `;
+      const tdAct = el("td");
+      tdAct.style.textAlign = "right";
+      const btn = el("button", "small success", "Allocate");
+      btn.onclick = () => openAllocateModal("in", c.id, p.id);
+      tdAct.appendChild(btn);
+      tr.appendChild(tdAct);
+      avBody.appendChild(tr);
+    });
+  });
+  if (!openCount) {
+    avBody.innerHTML = '<tr><td colspan="7" class="empty">No vacant portfolios are currently available.</td></tr>';
   }
 }
 
-$("refresh").onclick = load;
+// ---------------- Select Dropdown Helpers ----------------
+function fillCommitteeSelect(selId, preselectId) {
+  const sel = $(selId);
+  if (!state.committees.length) {
+    sel.innerHTML = '<option value="">-- No committees available --</option>';
+    return null;
+  }
+  sel.innerHTML = state.committees.map(c =>
+    `<option value="${c.id}" ${c.id == preselectId ? "selected" : ""}>${esc(c.name)} (${c.min_muns}+ MUNs)</option>`
+  ).join("");
+  return getCommitteeById(Number(sel.value));
+}
+
+function getCommitteeById(id) {
+  return state.committees.find(c => c.id === Number(id)) || null;
+}
+
+function fillPortfolioSelect(commSelId, portSelId, preselectPortId) {
+  const c = getCommitteeById(Number($(commSelId).value));
+  const psel = $(portSelId);
+  if (!c || !c.portfolios.length) {
+    psel.innerHTML = '<option value="">-- No portfolios in this committee --</option>';
+    return null;
+  }
+  psel.innerHTML = c.portfolios.map(p =>
+    `<option value="${p.id}" ${p.id == preselectPortId ? "selected" : ""}>${esc(p.name)} (${p.filled}/${p.capacity} filled)</option>`
+  ).join("");
+  return c.portfolios.find(p => p.id === Number(psel.value)) || null;
+}
+
+// ---------------- Load Everything ----------------
+async function load() {
+  try {
+    const [dash, commData, delegates] = await Promise.all([
+      api("/api/dashboard"),
+      api("/api/committees"),
+      api("/api/delegates")
+    ]);
+    state.committees = commData.committees || [];
+    state.delegates = delegates || [];
+
+    renderStats(dash.totals || {});
+    renderExperience(dash.experience || {}, Math.max(dash.totals?.delegates || 1, 1));
+    renderBars("countries", dash.top_countries);
+    renderBars("committees", dash.top_committees);
+    renderTable("experienced", dash.most_experienced);
+    renderTable("recent", dash.recent_delegates);
+    renderCommitteeViews();
+
+    $("updated").textContent = "Updated " + new Date().toLocaleTimeString();
+  } catch (e) {
+    if (e.message !== "Unauthorized") showBanner(e.message, true);
+  }
+}
+
+// ======================== MENU 1: ADD COMMITTEE ========================
+$("mAddComm").onclick = () => {
+  $("ac_name").value = "";
+  $("ac_min").value = "0";
+  $("ac_err").textContent = "";
+  $("dlgAddComm").showModal();
+  $("ac_name").focus();
+};
+
+$("formAddComm").onsubmit = async (e) => {
+  e.preventDefault();
+  $("ac_err").textContent = "";
+  try {
+    await api("/api/committees", jsonOpts("POST", {
+      name: $("ac_name").value.trim(),
+      min_muns: Number($("ac_min").value)
+    }));
+    closeDlg("dlgAddComm");
+    showBanner("Committee added successfully.", false);
+    load();
+  } catch (err) { $("ac_err").textContent = err.message; }
+};
+
+// ======================== MENU 2: ADD PORTFOLIO ========================
+$("mAddPort").onclick = () => {
+  if (!state.committees.length) return showBanner("No committees available. Add a committee first (Option 1).", true);
+  fillCommitteeSelect("ap_comm");
+  $("ap_name").value = "";
+  $("ap_cap").value = "1";
+  $("ap_err").textContent = "";
+  $("dlgAddPort").showModal();
+  $("ap_name").focus();
+};
+
+$("formAddPort").onsubmit = async (e) => {
+  e.preventDefault();
+  $("ap_err").textContent = "";
+  try {
+    const cid = Number($("ap_comm").value);
+    await api(`/api/committees/${cid}/portfolios`, jsonOpts("POST", {
+      name: $("ap_name").value.trim(),
+      capacity: Number($("ap_cap").value)
+    }));
+    closeDlg("dlgAddPort");
+    showBanner("Portfolio added successfully.", false);
+    load();
+  } catch (err) { $("ap_err").textContent = err.message; }
+};
+
+// ======================== MENU 3: SET PORTFOLIO CAPACITY ========================
+function syncSetCapInfo() {
+  const c = getCommitteeById(Number($("sc_comm").value));
+  const p = c?.portfolios.find(x => x.id === Number($("sc_port").value));
+  if (!p) {
+    $("sc_info").innerHTML = '<span style="color:var(--muted);">No portfolio selected.</span>';
+    $("sc_cap").value = "";
+    return;
+  }
+  $("sc_info").innerHTML = `
+    <div class="info-row"><span>Current Capacity</span><strong>${p.capacity}</strong></div>
+    <div class="info-row"><span>Delegates Filled</span><strong>${p.filled}</strong></div>
+    <div class="info-row"><span>Minimum Allowed</span><strong>${Math.max(1, p.filled)}</strong></div>
+  `;
+  $("sc_cap").min = Math.max(1, p.filled);
+  $("sc_cap").value = p.capacity;
+}
+
+$("sc_comm").onchange = () => { fillPortfolioSelect("sc_comm", "sc_port"); syncSetCapInfo(); };
+$("sc_port").onchange = syncSetCapInfo;
+
+$("mSetCap").onclick = () => {
+  if (!state.committees.length) return showBanner("No committees available.", true);
+  fillCommitteeSelect("sc_comm");
+  fillPortfolioSelect("sc_comm", "sc_port");
+  syncSetCapInfo();
+  $("sc_err").textContent = "";
+  $("dlgSetCap").showModal();
+};
+
+$("formSetCap").onsubmit = async (e) => {
+  e.preventDefault();
+  $("sc_err").textContent = "";
+  try {
+    const c = getCommitteeById(Number($("sc_comm").value));
+    const p = c?.portfolios.find(x => x.id === Number($("sc_port").value));
+    if (!p) throw new Error("Select a valid portfolio.");
+    await api(`/api/portfolios/${p.id}`, jsonOpts("PUT", {
+      name: p.name,
+      capacity: Number($("sc_cap").value)
+    }));
+    closeDlg("dlgSetCap");
+    showBanner(`Updated capacity for '${p.name}' to ${$("sc_cap").value}.`, false);
+    load();
+  } catch (err) { $("sc_err").textContent = err.message; }
+};
+
+// ======================== MENU 4: CHECK AVAILABILITY ========================
+function syncCheckAvail() {
+  const c = getCommitteeById(Number($("ca_comm").value));
+  const p = c?.portfolios.find(x => x.id === Number($("ca_port").value));
+  if (!c || !p) {
+    $("ca_result").innerHTML = '<span style="color:var(--muted);">Select a committee with portfolios to inspect availability.</span>';
+    return;
+  }
+  const dels = p.allocations.length ? p.allocations.map(a => esc(a.delegate_name)).join(", ") : "Unassigned";
+  $("ca_result").innerHTML = `
+    <div class="info-row"><span>Committee</span><strong>${esc(c.name)} (${c.min_muns}+ MUNs)</strong></div>
+    <div class="info-row"><span>Portfolio</span><strong>${esc(p.name)}</strong></div>
+    <div class="info-row"><span>Capacity</span><strong>${p.capacity}</strong></div>
+    <div class="info-row"><span>Filled</span><strong>${p.filled}</strong></div>
+    <div class="info-row"><span>Seats Left</span><strong>${p.available}</strong></div>
+    <div class="info-row"><span>Status</span><span class="badge ${p.available > 0 ? "open" : "full"}">${p.available > 0 ? "AVAILABLE" : "FULL"}</span></div>
+    <div class="info-row"><span>Allocated</span><strong>${dels}</strong></div>
+  `;
+}
+
+$("ca_comm").onchange = () => { fillPortfolioSelect("ca_comm", "ca_port"); syncCheckAvail(); };
+$("ca_port").onchange = syncCheckAvail;
+
+$("mCheckAvail").onclick = () => {
+  if (!state.committees.length) return showBanner("No committees available.", true);
+  fillCommitteeSelect("ca_comm");
+  fillPortfolioSelect("ca_comm", "ca_port");
+  syncCheckAvail();
+  $("dlgCheckAvail").showModal();
+};
+
+// ======================== MENU 5: ALLOCATE / DEALLOCATE ========================
+function switchAllocMode(mode) {
+  const isIn = mode === "in";
+  $("allocTabIn").classList.toggle("on", isIn);
+  $("allocTabOut").classList.toggle("on", !isIn);
+  $("formAllocIn").classList.toggle("hidden", !isIn);
+  $("formAllocOut").classList.toggle("hidden", isIn);
+}
+
+function syncDeallocList() {
+  const c = getCommitteeById(Number($("da_comm").value));
+  const p = c?.portfolios.find(x => x.id === Number($("da_port").value));
+  const sel = $("da_alloc");
+  if (!p || !p.allocations.length) {
+    sel.innerHTML = '<option value="">-- No delegates allocated here --</option>';
+    return;
+  }
+  sel.innerHTML = p.allocations.map(a => `<option value="${a.id}">${esc(a.delegate_name)}</option>`).join("");
+}
+
+function openAllocateModal(mode, commId, portId) {
+  if (!state.committees.length) return showBanner("No committees available.", true);
+  switchAllocMode(mode || "in");
+  fillCommitteeSelect("al_comm", commId);
+  fillPortfolioSelect("al_comm", "al_port", portId);
+  $("al_delSel").innerHTML = '<option value="">-- Select registered delegate --</option>' +
+    state.delegates.map(d => `<option value="${esc(d.name)}">${esc(d.name)} (${d.mun_attend} MUNs)</option>`).join("");
+  $("al_delName").value = "";
+  $("al_err").textContent = "";
+
+  fillCommitteeSelect("da_comm", commId);
+  fillPortfolioSelect("da_comm", "da_port", portId);
+  syncDeallocList();
+  $("da_err").textContent = "";
+  $("dlgAlloc").showModal();
+}
+
+$("mAlloc").onclick = () => openAllocateModal("in");
+$("allocTabIn").onclick = () => switchAllocMode("in");
+$("allocTabOut").onclick = () => switchAllocMode("out");
+$("al_comm").onchange = () => fillPortfolioSelect("al_comm", "al_port");
+$("al_delSel").onchange = () => { if ($("al_delSel").value) $("al_delName").value = $("al_delSel").value; };
+$("da_comm").onchange = () => { fillPortfolioSelect("da_comm", "da_port"); syncDeallocList(); };
+$("da_port").onchange = syncDeallocList;
+
+$("formAllocIn").onsubmit = async (e) => {
+  e.preventDefault();
+  $("al_err").textContent = "";
+  try {
+    const pid = Number($("al_port").value);
+    if (!pid) throw new Error("Select a valid portfolio.");
+    const name = $("al_delName").value.trim();
+    await api("/api/allocations", jsonOpts("POST", { portfolio_id: pid, delegate_name: name }));
+    closeDlg("dlgAlloc");
+    showBanner(`Allocated '${name}' successfully.`, false);
+    load();
+  } catch (err) { $("al_err").textContent = err.message; }
+};
+
+$("formAllocOut").onsubmit = async (e) => {
+  e.preventDefault();
+  $("da_err").textContent = "";
+  try {
+    const aid = Number($("da_alloc").value);
+    if (!aid) throw new Error("No allocated delegate selected to remove.");
+    await api(`/api/allocations/${aid}`, { method: "DELETE" });
+    closeDlg("dlgAlloc");
+    showBanner("Delegate deallocated successfully.", false);
+    load();
+  } catch (err) { $("da_err").textContent = err.message; }
+};
+
+// ======================== MENU 6: UPDATE COMMITTEE / PORTFOLIO ========================
+function switchUpdMode(mode) {
+  const isComm = mode === "comm";
+  $("updTabComm").classList.toggle("on", isComm);
+  $("updTabPort").classList.toggle("on", !isComm);
+  $("formUpdComm").classList.toggle("hidden", !isComm);
+  $("formUpdPort").classList.toggle("hidden", isComm);
+}
+
+function syncUpdComm() {
+  const c = getCommitteeById(Number($("uc_comm").value));
+  $("uc_name").value = c ? c.name : "";
+  $("uc_min").value = c ? c.min_muns : 0;
+}
+
+function syncUpdPort() {
+  const c = getCommitteeById(Number($("up_comm").value));
+  const p = c?.portfolios.find(x => x.id === Number($("up_port").value));
+  $("up_name").value = p ? p.name : "";
+  $("up_cap").value = p ? p.capacity : 1;
+  $("up_cap").min = p ? Math.max(1, p.filled) : 1;
+}
+
+$("mUpdate").onclick = () => {
+  if (!state.committees.length) return showBanner("No committees available to update.", true);
+  switchUpdMode("comm");
+  fillCommitteeSelect("uc_comm");
+  syncUpdComm();
+  fillCommitteeSelect("up_comm");
+  fillPortfolioSelect("up_comm", "up_port");
+  syncUpdPort();
+  $("uc_err").textContent = "";
+  $("up_err").textContent = "";
+  $("dlgUpdate").showModal();
+};
+
+$("updTabComm").onclick = () => switchUpdMode("comm");
+$("updTabPort").onclick = () => switchUpdMode("port");
+$("uc_comm").onchange = syncUpdComm;
+$("up_comm").onchange = () => { fillPortfolioSelect("up_comm", "up_port"); syncUpdPort(); };
+$("up_port").onchange = syncUpdPort;
+
+$("formUpdComm").onsubmit = async (e) => {
+  e.preventDefault();
+  $("uc_err").textContent = "";
+  try {
+    const cid = Number($("uc_comm").value);
+    await api(`/api/committees/${cid}`, jsonOpts("PUT", {
+      name: $("uc_name").value.trim(),
+      min_muns: Number($("uc_min").value)
+    }));
+    closeDlg("dlgUpdate");
+    showBanner("Committee updated successfully.", false);
+    load();
+  } catch (err) { $("uc_err").textContent = err.message; }
+};
+
+$("formUpdPort").onsubmit = async (e) => {
+  e.preventDefault();
+  $("up_err").textContent = "";
+  try {
+    const pid = Number($("up_port").value);
+    if (!pid) throw new Error("Select a valid portfolio.");
+    await api(`/api/portfolios/${pid}`, jsonOpts("PUT", {
+      name: $("up_name").value.trim(),
+      capacity: Number($("up_cap").value)
+    }));
+    closeDlg("dlgUpdate");
+    showBanner("Portfolio updated successfully.", false);
+    load();
+  } catch (err) { $("up_err").textContent = err.message; }
+};
+
+// ======================== MENU 7: DELETE COMMITTEE / PORTFOLIO ========================
+function switchDelMode(mode) {
+  const isComm = mode === "comm";
+  $("delTabComm").classList.toggle("on", isComm);
+  $("delTabPort").classList.toggle("on", !isComm);
+  $("formDelComm").classList.toggle("hidden", !isComm);
+  $("formDelPort").classList.toggle("hidden", isComm);
+}
+
+function syncDelPortWarn() {
+  const c = getCommitteeById(Number($("dp_comm").value));
+  const p = c?.portfolios.find(x => x.id === Number($("dp_port").value));
+  $("dp_warn").textContent = p
+    ? `Portfolio '${p.name}' currently has ${p.filled} allocated delegate(s). Deleting it removes those allocations.`
+    : "No portfolio available in this committee.";
+}
+
+$("mDelete").onclick = () => {
+  if (!state.committees.length) return showBanner("No committees available to delete.", true);
+  switchDelMode("comm");
+  fillCommitteeSelect("dc_comm");
+  fillCommitteeSelect("dp_comm");
+  fillPortfolioSelect("dp_comm", "dp_port");
+  syncDelPortWarn();
+  $("dc_err").textContent = "";
+  $("dp_err").textContent = "";
+  $("dlgDelete").showModal();
+};
+
+$("delTabComm").onclick = () => switchDelMode("comm");
+$("delTabPort").onclick = () => switchDelMode("port");
+$("dp_comm").onchange = () => { fillPortfolioSelect("dp_comm", "dp_port"); syncDelPortWarn(); };
+$("dp_port").onchange = syncDelPortWarn;
+
+$("formDelComm").onsubmit = async (e) => {
+  e.preventDefault();
+  $("dc_err").textContent = "";
+  const c = getCommitteeById(Number($("dc_comm").value));
+  if (!c) return;
+  if (!confirm(`Delete committee '${c.name}' and all its portfolios?`)) return;
+  try {
+    await api(`/api/committees/${c.id}`, { method: "DELETE" });
+    closeDlg("dlgDelete");
+    showBanner(`Committee '${c.name}' deleted.`, false);
+    load();
+  } catch (err) { $("dc_err").textContent = err.message; }
+};
+
+$("formDelPort").onsubmit = async (e) => {
+  e.preventDefault();
+  $("dp_err").textContent = "";
+  const c = getCommitteeById(Number($("dp_comm").value));
+  const p = c?.portfolios.find(x => x.id === Number($("dp_port").value));
+  if (!p) { $("dp_err").textContent = "Select a valid portfolio."; return; }
+  if (!confirm(`Delete portfolio '${p.name}' (${p.filled} delegate(s) allocated)?`)) return;
+  try {
+    await api(`/api/portfolios/${p.id}`, { method: "DELETE" });
+    closeDlg("dlgDelete");
+    showBanner(`Portfolio '${p.name}' deleted.`, false);
+    load();
+  } catch (err) { $("dp_err").textContent = err.message; }
+};
+
+// ======================== MENU 8 & 9 + AUTO-ALLOCATE ========================
+$("mDispAvail").onclick = () => { setCommitteeView("avail"); $("viewAvailWrap").scrollIntoView({ behavior: "smooth", block: "nearest" }); };
+$("mDispAll").onclick = () => { setCommitteeView("all"); $("viewAllWrap").scrollIntoView({ behavior: "smooth", block: "nearest" }); };
+$("tabAvail").onclick = () => setCommitteeView("avail");
+$("tabAll").onclick = () => setCommitteeView("all");
+
+$("btnAutoAlloc").onclick = async () => {
+  if (!confirm("Auto-allocate unallocated delegates by MUN experience respecting committee eligibility?")) return;
+  try {
+    const out = await api("/api/allocations/auto", { method: "POST" });
+    showBanner(out.allocated_count ? `Auto-allocated ${out.allocated_count} delegate(s).` : (out.message || "Nothing allocated."), false);
+    load();
+  } catch (e) { showBanner(e.message, true); }
+};
+
+$("refresh").onclick = () => { showBanner(""); load(); };
+$("btnLogout").onclick = async () => { await fetch("/api/auth/logout", { method: "POST" }); window.location.href = "/login.html"; };
+
 load();
 </script>
 </body>

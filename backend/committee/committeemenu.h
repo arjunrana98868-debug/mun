@@ -1,18 +1,18 @@
-// CommitteeMenu.h
-// Menu for the Committee & Portfolio module. Call committeeMenu() from Delegate.cpp.
+#pragma once
+// committeemenu.h - Interactive CLI menu for the Committee & Portfolio module
 #include "db.h"
-#include "addCommittee.h"
-#include "dispCommittee.h"
-#include "updateCommittee.h"
-#include "deleteCommittee.h"
+#include "addcommittee.h"
+#include "dispcommittee.h"
+#include "updatecommittee.h"
+#include "deletecommittee.h"
 
-void committeeMenu() {
+inline void committeeMenu() {
     static bool dbInitialised = false;
-    if (!dbInitialised) {          // connect to MySQL + load saved data once
-        dbConnect();
-        dbLoad();
+    if (!dbInitialised) {
+        dbInitTables();
         dbInitialised = true;
     }
+    dbLoad(); // Always reload latest committees & allocations from MySQL (syncs web edits)
 
     int ch;
     do {
@@ -26,7 +26,7 @@ void committeeMenu() {
         cout << "| 2    | Add Portfolio                             |\n";
         cout << "| 3    | Set Portfolio Capacity                    |\n";
         cout << "| 4    | Check Availability                        |\n";
-        cout << "| 5    | Allocate Delegate to Portfolio            |\n";
+        cout << "| 5    | Allocate / Deallocate Delegate            |\n";
         cout << "| 6    | Update Committee / Portfolio              |\n";
         cout << "| 7    | Delete Committee / Portfolio              |\n";
         cout << "| 8    | Display Available Portfolios              |\n";
@@ -40,7 +40,13 @@ void committeeMenu() {
         case 2: addPortfolio(); break;
         case 3: setPortfolioCapacity(); break;
         case 4: checkAvailability(); break;
-        case 5: allocateDelegate(); break;
+        case 5: {
+            int t = readInt("1. Allocate delegate  2. Deallocate delegate: ");
+            if (t == 1) allocateDelegate();
+            else if (t == 2) deallocateDelegate();
+            else cout << "Invalid choice.\n";
+            break;
+        }
         case 6: {
             int t = readInt("1. Update committee  2. Update portfolio: ");
             if (t == 1) updateCommittee();

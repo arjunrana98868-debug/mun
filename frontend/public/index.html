@@ -1,448 +1,99 @@
 <!DOCTYPE html>
+<!-- File: frontend/public/index.html -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MUN CV Analyzer - Executive Management Platform</title>
-
-  <!-- Font and Icons -->
+  <title>CV Analyzer - Programmer Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
   <style>
     :root {
-      /* Palette matching Executive Diplomatic Theme */
       --bg-gradient: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #0d1322 100%);
-      --bg: #0b0f19;
-      --card: rgba(23, 31, 48, 0.75);
+      --card: rgba(23, 31, 48, 0.8);
       --card-solid: #171f30;
-      --card-hover: rgba(30, 41, 64, 0.85);
       --text: #f3f4f6;
       --muted: #9ca3af;
       --accent: #3b82f6;
       --accent-glow: rgba(59, 130, 246, 0.25);
-      --border: rgba(255, 255, 255, 0.08);
-      --border-accent: rgba(59, 130, 246, 0.3);
+      --border: rgba(255, 255, 255, 0.09);
+      --border-accent: rgba(59, 130, 246, 0.35);
       --track: rgba(255, 255, 255, 0.06);
       --danger: #ef4444;
-      --danger-bg: rgba(239, 68, 68, 0.12);
-      --success: #10b981;
-      --success-bg: rgba(16, 185, 129, 0.12);
-
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.35);
-      --glass-blur: blur(16px);
-      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --danger-bg: rgba(239, 68, 68, 0.14);
     }
-
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
-        --bg: #f8fafc;
-        --card: rgba(255, 255, 255, 0.85);
-        --card-solid: #ffffff;
-        --card-hover: rgba(255, 255, 255, 0.98);
-        --text: #0f172a;
-        --muted: #64748b;
-        --accent: #2563eb;
-        --accent-glow: rgba(37, 99, 235, 0.15);
-        --border: rgba(0, 0, 0, 0.07);
-        --border-accent: rgba(37, 99, 235, 0.25);
-        --track: rgba(0, 0, 0, 0.05);
-        --danger: #dc2626;
-        --danger-bg: rgba(220, 38, 38, 0.08);
-        --success: #059669;
-        --success-bg: rgba(5, 150, 105, 0.08);
-
-        --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.04);
-        --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.06);
-      }
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 0 0 60px 0;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg-gradient); color: var(--text); min-height: 100vh; padding-bottom: 60px; line-height: 1.5;
     }
-
-    /* Top Navigation Bar */
     .navbar-outer {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--card);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 32px;
-      box-shadow: var(--shadow-sm);
+      position: sticky; top: 0; z-index: 100; background: var(--card); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border); margin-bottom: 32px;
     }
-
     .navbar {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 12px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      max-width: 1200px; margin: 0 auto; padding: 12px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 800;
-      font-size: 1.15rem;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      text-decoration: none;
-    }
-
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.12rem; color: var(--text); text-decoration: none; }
     .brand-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--accent) 0%, #1d4ed8 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 1.25rem;
-      box-shadow: 0 4px 12px var(--accent-glow);
+      width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem;
     }
-
-    nav {
-      display: flex;
-      gap: 6px;
-      background: var(--track);
-      padding: 4px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-
+    nav { display: flex; gap: 6px; background: var(--track); padding: 4px; border-radius: 12px; border: 1px solid var(--border); flex-wrap: wrap; }
     nav a {
-      padding: 8px 16px;
-      border-radius: 8px;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 600;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      padding: 8px 14px; border-radius: 8px; color: var(--muted); text-decoration: none;
+      font-size: 0.86rem; font-weight: 600; display: flex; align-items: center; gap: 6px;
     }
-
-    nav a:hover {
-      color: var(--text);
+    nav a:hover { color: var(--text); }
+    nav a.on { background: var(--card-solid); color: var(--text); border: 1px solid var(--border); }
+    button.logout {
+      font-family: inherit; font-size: 0.84rem; font-weight: 600; padding: 7px 13px; border-radius: 9px;
+      background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(239,68,68,0.3);
+      cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
     }
-
-    nav a.on {
-      background: var(--card-solid);
-      color: var(--text);
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border);
-    }
-
-    /* Main Container */
-    main {
-      width: 100%;
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    /* Page Header */
-    .header-title {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .header-title h1 {
-      font-size: 1.85rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.25;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .header-title h1 i {
-      color: var(--accent);
-    }
-
-    p.sub {
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin-top: 6px;
-    }
-
-    /* Card Box */
+    main { width: 100%; max-width: 680px; margin: 0 auto; padding: 0 24px; }
+    .header-title { text-align: center; margin-bottom: 24px; }
+    .header-title h1 { font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .header-title h1 i { color: var(--accent); }
+    p.sub { color: var(--muted); font-size: 0.92rem; margin-top: 6px; }
     .card {
-      background: var(--card);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 24px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
+      background: var(--card); backdrop-filter: blur(16px); border: 1px solid var(--border);
+      border-radius: 18px; padding: 24px; margin-bottom: 20px;
     }
-
-    /* Drop Zone */
     #drop {
-      border: 2px dashed var(--border-accent);
-      border-radius: 14px;
-      padding: 36px 20px;
-      text-align: center;
-      cursor: pointer;
-      color: var(--muted);
-      background: var(--track);
-      transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      position: relative;
+      border: 2px dashed var(--border-accent); border-radius: 14px; padding: 36px 20px;
+      text-align: center; cursor: pointer; color: var(--muted); background: var(--track);
+      display: flex; flex-direction: column; align-items: center; gap: 10px; transition: all 0.2s;
     }
-
-    #drop:hover {
-      border-color: var(--accent);
-      background: rgba(59, 130, 246, 0.04);
-      transform: translateY(-2px);
-    }
-
-    #drop.over {
-      border-color: var(--accent);
-      background: var(--accent-glow);
-      color: var(--accent);
-      transform: scale(1.01);
-    }
-
+    #drop:hover, #drop.over { border-color: var(--accent); background: rgba(59,130,246,0.08); }
     .drop-icon-box {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      background: var(--card-solid);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      color: var(--accent);
-      box-shadow: var(--shadow-sm);
+      width: 52px; height: 52px; border-radius: 14px; background: var(--card-solid);
+      border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: var(--accent);
     }
-
-    .drop-text {
-      font-weight: 600;
-      font-size: 0.98rem;
-      color: var(--text);
-    }
-
-    .drop-hint {
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-
-    #fileName {
-      margin-top: 4px;
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      word-break: break-all;
-    }
-
-    #fileName:not(:empty)::before {
-      content: "📄";
-    }
-
-    /* Action Button */
+    #fileName { font-size: 0.88rem; font-weight: 700; color: var(--accent); word-break: break-all; }
     button#go {
-      width: 100%;
-      margin-top: 20px;
-      padding: 14px 20px;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 700;
-      border: 1px solid var(--border-accent);
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--accent) 0%, #1d4ed8 100%);
-      color: #ffffff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: var(--transition);
-      box-shadow: 0 4px 14px var(--accent-glow);
+      width: 100%; margin-top: 18px; padding: 13px 20px; font-family: inherit; font-size: 0.98rem; font-weight: 700;
+      border: 1px solid var(--border-accent); border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #1d4ed8); color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
-
-    button#go:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px var(--accent-glow);
-      opacity: 0.95;
-    }
-
-    button#go:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      box-shadow: none;
-      transform: none;
-    }
-
-    /* Status Container */
-    #status {
-      font-size: 0.92rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 16px 20px;
-      border-radius: 14px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-
-    #status.err {
-      color: var(--danger);
-      background: var(--danger-bg);
-      border-color: rgba(239, 68, 68, 0.3);
-    }
-
-    /* Loading Spinner inside Status */
-    .spinner {
-      width: 18px;
-      height: 18px;
-      border: 2px solid var(--muted);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      flex-shrink: 0;
-    }
-
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Results Dashboard Grid */
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .stat {
-      background: var(--track);
-      border-radius: 14px;
-      padding: 18px;
-      border: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .stat .label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .stat .value {
-      font-size: 1.8rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      word-break: break-word;
-      line-height: 1.2;
-    }
-
-    /* Evidence List */
-    #evidenceWrap {
-      margin-top: 20px;
-      padding-top: 18px;
-      border-top: 1px solid var(--border);
-    }
-
-    .evidence-title {
-      color: var(--muted);
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    ul#evidence {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    ul#evidence li {
-      padding: 10px 14px;
-      border-radius: 10px;
-      background: var(--track);
-      border: 1px solid var(--border);
-      font-size: 0.88rem;
-      font-weight: 500;
-      color: var(--text);
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      line-height: 1.4;
-    }
-
-    ul#evidence li::before {
-      content: "•";
-      color: var(--accent);
-      font-weight: 800;
-      font-size: 1.2rem;
-      line-height: 1;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* Responsive */
-    @media (max-width: 520px) {
-      main { padding: 0 16px; }
-      .stats { grid-template-columns: 1fr; }
-      .navbar { padding: 12px 16px; }
-    }
+    button#go:disabled { opacity: 0.45; cursor: not-allowed; }
+    #status { font-size: 0.92rem; font-weight: 600; display: flex; align-items: center; gap: 10px; padding: 16px 20px; }
+    #status.err { color: var(--danger); background: var(--danger-bg); border-color: rgba(239,68,68,0.3); }
+    .spinner { width: 18px; height: 18px; border: 2px solid var(--muted); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .stat { background: var(--track); border-radius: 14px; padding: 18px; border: 1px solid var(--border); }
+    .stat .label { font-size: 0.76rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
+    .stat .value { font-size: 1.75rem; font-weight: 800; }
+    #evidenceWrap { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+    ul#evidence { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+    ul#evidence li { padding: 10px 14px; border-radius: 10px; background: var(--track); border: 1px solid var(--border); font-size: 0.88rem; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
@@ -451,36 +102,33 @@
   <div class="navbar">
     <a href="/dashboard.html" class="brand">
       <div class="brand-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
-      <span>MUN Portal</span>
+      <span>MUN Programmer Portal</span>
     </a>
     <nav>
-      <a href="/dashboard.html" id="nav-dashboard"><i class="ph ph-squares-four"></i> Dashboard</a>
-      <a href="/delegates.html" id="nav-delegates"><i class="ph ph-users-three"></i> Delegates</a>
-      <a href="/" class="on" id="nav-cv"><i class="ph ph-file-magnifying-glass"></i> CV Analyzer</a>
+      <a href="/dashboard.html"><i class="ph ph-squares-four"></i> Dashboard</a>
+      <a href="/delegates.html"><i class="ph ph-users-three"></i> Delegates</a>
+      <a href="/committees.html"><i class="ph ph-buildings"></i> Committees & Requests</a>
+      <a href="/index.html" class="on"><i class="ph ph-file-magnifying-glass"></i> CV Analyzer</a>
     </nav>
+    <button id="btnLogout" class="logout"><i class="ph ph-sign-out"></i> Logout</button>
   </div>
 </div>
 
 <main>
   <div class="header-title">
     <h1><i class="ph ph-file-text"></i> MUN CV Analyzer</h1>
-    <p class="sub">Upload a CV (.pdf or .txt) to evaluate Model UN experience & candidate location.</p>
+    <p class="sub">Upload any candidate CV (.pdf or .txt) to evaluate MUN experience &amp; location via the C++ parser.</p>
   </div>
 
   <div class="card">
     <div id="drop">
       <div class="drop-icon-box"><i class="ph ph-cloud-arrow-up"></i></div>
-      <div>
-        <div class="drop-text">Click or drag a CV file here</div>
-        <div class="drop-hint">Supports PDF and TXT documents</div>
-      </div>
+      <div style="font-weight:700;color:var(--text);">Click or drag a CV file here</div>
+      <div style="font-size:0.82rem;">Supports PDF and TXT documents</div>
       <div id="fileName"></div>
     </div>
     <input id="file" type="file" accept=".pdf,.txt" class="hidden">
-    <button id="go" disabled>
-      <i class="ph ph-sparkle"></i>
-      <span>Analyze CV</span>
-    </button>
+    <button id="go" disabled><i class="ph ph-sparkle"></i> Analyze CV</button>
   </div>
 
   <div id="status" class="card hidden"></div>
@@ -488,17 +136,16 @@
   <div id="result" class="card hidden">
     <div class="stats">
       <div class="stat">
-        <div class="label"><i class="ph ph-certificate" style="color:var(--accent)"></i> MUNs Done</div>
+        <div class="label">MUNs Done</div>
         <div class="value" id="mun">-</div>
       </div>
       <div class="stat">
-        <div class="label"><i class="ph ph-map-pin" style="color:var(--accent)"></i> Location</div>
+        <div class="label">Location</div>
         <div class="value" id="loc">-</div>
       </div>
     </div>
-
     <div id="evidenceWrap" class="hidden">
-      <div class="evidence-title"><i class="ph ph-list-magnifying-glass" style="color:var(--accent)"></i> MUN entries found</div>
+      <div style="color:var(--muted);font-size:0.8rem;font-weight:700;text-transform:uppercase;">MUN entries found</div>
       <ul id="evidence"></ul>
     </div>
   </div>
@@ -520,99 +167,54 @@ function setFile(f) {
   go.disabled = false;
 }
 
-drop.addEventListener("click", () => fileInput.click());
-fileInput.addEventListener("change", () => setFile(fileInput.files[0]));
-drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("over"); });
-drop.addEventListener("dragleave", () => drop.classList.remove("over"));
-drop.addEventListener("drop", (e) => {
-  e.preventDefault(); 
-  drop.classList.remove("over");
-  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-    setFile(e.dataTransfer.files[0]);
-  }
-});
+drop.onclick = () => fileInput.click();
+fileInput.onchange = () => setFile(fileInput.files[0]);
+drop.ondragover = (e) => { e.preventDefault(); drop.classList.add("over"); };
+drop.ondragleave = () => drop.classList.remove("over");
+drop.ondrop = (e) => { e.preventDefault(); drop.classList.remove("over"); if (e.dataTransfer.files.length) setFile(e.dataTransfer.files[0]); };
 
-// Fallback mock analyzer for live previewing when API backend server is offline
-function getMockAnalysis(file) {
-  const isPdf = file.name.endsWith(".pdf");
-  return {
-    mun_count: isPdf ? 8 : 4,
-    location: "London, United Kingdom",
-    matched: [
-      "Delegate of France - Harvard WorldMUN 2024 (DISEC)",
-      "Best Delegate - Oxford International MUN 2023 (UNSC)",
-      "Chair - European Youth Parliament 2023",
-      "Delegate of Germany - National Model UN New York 2022"
-    ].slice(0, isPdf ? 4 : 2)
-  };
-}
-
-go.addEventListener("click", async () => {
+go.onclick = async () => {
   if (!chosen) return;
   go.disabled = true;
   resultBox.classList.add("hidden");
-  statusBox.classList.remove("hidden");
-  statusBox.classList.remove("err");
-  
-  // Render loading indicator inside status box
-  statusBox.replaceChildren(
-    (() => {
-      const sp = document.createElement("div");
-      sp.className = "spinner";
-      return sp;
-    })(),
-    document.createTextNode(" Analyzing CV document...")
-  );
+  statusBox.classList.remove("hidden", "err");
+  statusBox.innerHTML = '<div class="spinner"></div> Analyzing CV document...';
 
   const fd = new FormData();
   fd.append("cv", chosen);
-  
-  try {
-    let data;
-    try {
-      const res = await fetch("/api/analyze", { method: "POST", body: fd });
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || `Server status ${res.status}`);
-      }
-      data = await res.json();
-    } catch (fetchError) {
-      // If endpoint unavailable (e.g. preview environment), gracefully fallback to mock analysis
-      console.warn("Backend API unavailable, using preview dataset:", fetchError.message);
-      await new Promise((r) => setTimeout(r, 600)); // Simulate realistic network latency
-      data = getMockAnalysis(chosen);
-    }
 
-    document.getElementById("mun").textContent = data.mun_count !== undefined ? data.mun_count : "0";
+  try {
+    const res = await fetch("/api/analyze", { method: "POST", body: fd });
+    if (res.status === 401 || res.status === 403) { window.location.href = "/login.html"; return; }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `Server status ${res.status}`);
+
+    document.getElementById("mun").textContent = data.mun_count ?? "0";
     document.getElementById("loc").textContent = data.location || "Not found";
-    
+
     const ul = document.getElementById("evidence");
     ul.innerHTML = "";
     (data.matched || []).forEach((m) => {
       const li = document.createElement("li");
-      li.textContent = m.replace(/^[-*•\s]+/, "");   // textContent: safe against HTML in CVs
+      li.textContent = m.replace(/^[-*\u2022\s]+/, "");
       ul.appendChild(li);
     });
-    
     document.getElementById("evidenceWrap").classList.toggle("hidden", !(data.matched || []).length);
 
     statusBox.classList.add("hidden");
     resultBox.classList.remove("hidden");
   } catch (e) {
     statusBox.classList.add("err");
-    statusBox.replaceChildren(
-      (() => {
-        const icon = document.createElement("i");
-        icon.className = "ph ph-warning-circle";
-        icon.style.fontSize = "1.2rem";
-        return icon;
-      })(),
-      document.createTextNode(" Error: " + e.message)
-    );
+    statusBox.textContent = "Error: " + e.message;
   } finally {
     go.disabled = false;
   }
-});
+};
+
+document.getElementById("btnLogout").onclick = async () => {
+  await fetch("/api/auth/logout", { method: "POST" });
+  window.location.href = "/login.html";
+};
 </script>
 </body>
 </html>

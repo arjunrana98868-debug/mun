@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<!-- File: frontend/public/delegate-portal.html -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delegate Portal - MUN Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #0d1322 100%);
+      --card: rgba(23, 31, 48, 0.84);
+      --solid: #171f30;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --border: rgba(255, 255, 255, 0.09);
+      --track: rgba(255, 255, 255, 0.06);
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.14);
+      --warn: #f59e0b;
+      --warn-bg: rgba(245, 158, 11, 0.14);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.14);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 60px; line-height: 1.5;
+    }
+    .navbar-outer {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--card); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border); margin-bottom: 28px;
+    }
+    .navbar {
+      max-width: 1180px; margin: 0 auto; padding: 12px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: var(--text); text-decoration: none; }
+    .brand-icon {
+      width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem;
+    }
+    .user-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .pill {
+      padding: 5px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 700;
+      background: var(--track); border: 1px solid var(--border); color: var(--text);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .pill.elig { background: var(--success-bg); color: var(--success); border-color: rgba(16,185,129,0.3); }
+    .pill.warn { background: var(--warn-bg); color: var(--warn); border-color: rgba(245,158,11,0.35); }
+    main { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .banner {
+      display: none; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 12px;
+      margin-bottom: 20px; font-size: 0.9rem; font-weight: 600;
+    }
+    .banner.ok { display: flex; background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.3); }
+    .banner.err { display: flex; background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+
+    .gate-alert {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+      padding: 16px 20px; border-radius: 14px; margin-bottom: 20px;
+      background: var(--warn-bg); border: 1px solid rgba(245,158,11,0.4); color: #fde68a;
+    }
+    .gate-alert strong { color: #fff; font-size: 0.96rem; display: block; margin-bottom: 2px; }
+
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px; margin-bottom: 22px;
+    }
+    .kpi {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px;
+    }
+    .kpi .label { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .kpi .val { font-size: 1.55rem; font-weight: 800; margin-top: 4px; }
+
+    .sections-stack { display: flex; flex-direction: column; }
+    .order-first { order: 1; }
+    .order-second { order: 2; }
+
+    .grid-top { display: grid; grid-template-columns: 1.05fr 1fr; gap: 20px; margin-bottom: 22px; }
+    @media (max-width: 860px) { .grid-top { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card); backdrop-filter: blur(16px); border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px; margin-bottom: 22px;
+    }
+    .card.highlight-step {
+      border-color: rgba(245,158,11,0.55);
+      box-shadow: 0 0 0 1px rgba(245,158,11,0.2), 0 12px 30px rgba(0,0,0,0.28);
+    }
+    .grid-top .card { margin-bottom: 0; }
+    h2 { font-size: 1.05rem; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .sub { color: var(--muted); font-size: 0.86rem; margin-bottom: 14px; }
+    button {
+      font-family: inherit; font-size: 0.83rem; font-weight: 600; padding: 8px 13px;
+      border-radius: 10px; border: 1px solid var(--border); background: var(--solid);
+      color: var(--text); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+      transition: all 0.2s;
+    }
+    button:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--accent); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.primary { background: linear-gradient(135deg, var(--accent), #1d4ed8); color: #fff; border-color: rgba(59,130,246,0.4); }
+    button.danger { background: var(--danger-bg); color: var(--danger); border-color: rgba(239,68,68,0.3); }
+    button.danger:hover:not(:disabled) { background: var(--danger); color: #fff; }
+    button.small { padding: 5px 10px; font-size: 0.78rem; border-radius: 8px; }
+    button.active { border-color: var(--accent); color: #fff; background: var(--accent-glow); }
+
+    input[type="search"] {
+      font-family: inherit; font-size: 0.85rem; padding: 8px 12px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--track); color: var(--text);
+      outline: none; min-width: 220px;
+    }
+    input[type="search"]:focus { border-color: var(--accent); }
+
+    #drop {
+      border: 2px dashed rgba(59,130,246,0.4); border-radius: 14px; padding: 22px;
+      text-align: center; cursor: pointer; background: var(--track); margin-bottom: 12px;
+    }
+    #drop:hover { border-color: var(--accent); }
+    .cv-out {
+      margin-top: 12px; padding: 12px; border-radius: 12px; background: var(--track);
+      border: 1px solid var(--border); font-size: 0.86rem; display: none;
+    }
+    .cv-out.show { display: block; }
+
+    .alloc-item, .req-item {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 11px 14px; border-radius: 12px; background: var(--track);
+      border: 1px solid var(--border); margin-bottom: 10px; flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
+      border-radius: 999px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .badge.eligible, .badge.approved, .badge.open { background: var(--success-bg); color: var(--success); }
+    .badge.locked, .badge.rejected, .badge.full { background: var(--danger-bg); color: var(--danger); }
+    .badge.pending { background: var(--warn-bg); color: var(--warn); }
+
+    .controls {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .filter-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; min-width: 780px; }
+    th, td { text-align: left; padding: 12px 14px; font-size: 0.88rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    th {
+      color: var(--muted); font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em; background: var(--track);
+    }
+    tr:last-child td { border-bottom: 0; }
+    tr.locked-row { opacity: 0.75; }
+    .meta { font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
+    .seat-num { font-size: 0.96rem; font-weight: 800; color: var(--success); }
+    .seat-num.zero { color: var(--danger); }
+    .empty { color: var(--muted); font-style: italic; font-size: 0.88rem; padding: 20px 12px; text-align: center; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div class="navbar-outer">
+  <div class="navbar">
+    <a href="/delegate-portal.html" class="brand">
+      <div class="brand-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
+      <span>MUN Delegate Portal</span>
+    </a>
+    <div class="user-bar">
+      <span class="pill" id="userBadge"><i class="ph ph-user"></i> Loading...</span>
+      <span class="pill warn" id="eligBadge"><i class="ph ph-warning"></i> CV Pending</span>
+      <button id="btnRefresh" class="small"><i class="ph ph-arrows-clockwise"></i> Refresh</button>
+      <button id="btnLogout" class="danger small"><i class="ph ph-sign-out"></i> Logout</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div id="banner" class="banner"></div>
+
+  <!-- Step 1 Gate Alert (shown only before CV is uploaded) -->
+  <div id="cvGateAlert" class="gate-alert hidden">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <i class="ph ph-file-arrow-up" style="font-size:1.7rem;color:var(--warn);"></i>
+      <div>
+        <strong>Step 1 Required: Upload Your CV First</strong>
+        <span style="font-size:0.86rem;">Upload your CV (.txt or .pdf) to calculate your verified MUN score. Committee requests stay locked until your CV is verified.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary KPIs -->
+  <div class="kpi-grid" id="kpiGrid"></div>
+
+  <!-- Sections auto-order: CV Upload first before verification; Committees first after verification -->
+  <div class="sections-stack">
+
+    <!-- CV Upload + Allocations & Requests -->
+    <div id="cvSectionWrap" class="grid-top order-first">
+      <div id="cvCard" class="card">
+        <h2><i class="ph ph-file-arrow-up" style="color:var(--accent)"></i> <span id="cvCardTitle">Step 1: Upload Your CV to Verify MUN Score</span></h2>
+        <p class="sub" id="cvCardSub">Upload your CV (.txt or .pdf). Our C++ CV Analyzer calculates your MUN score and unlocks committees matching your eligibility (e.g., 0 MUNs &rarr; 0-MUN committees; 2 MUNs &rarr; up to 2-MUN committees).</p>
+        <div id="drop">
+          <i class="ph ph-cloud-arrow-up" style="font-size:1.8rem;color:var(--accent)"></i>
+          <div style="font-weight:700;margin-top:6px;">Click or drag CV file here (.txt / .pdf)</div>
+          <div id="fileName" style="font-size:0.84rem;color:var(--accent);margin-top:4px;font-weight:600;"></div>
+        </div>
+        <input type="file" id="cvFile" accept=".txt,.pdf" class="hidden">
+        <button id="btnAnalyze" class="primary" style="width:100%;justify-content:center;" disabled>
+          <i class="ph ph-sparkle"></i> Analyze CV &amp; Verify My MUN Score
+        </button>
+        <div id="cvOut" class="cv-out"></div>
+      </div>
+
+      <div class="card">
+        <h2><i class="ph ph-briefcase" style="color:var(--accent)"></i> My Acquired Allocations</h2>
+        <div id="myAllocs"></div>
+
+        <h2 style="margin-top:18px;"><i class="ph ph-clock-countdown" style="color:var(--accent)"></i> My Request History</h2>
+        <div id="myReqs"></div>
+      </div>
+    </div>
+
+    <!-- Available Committees & Portfolios List with Remaining Seats & Eligibility -->
+    <div id="commSectionWrap" class="card order-second">
+      <div class="controls">
+        <div>
+          <h2 style="margin-bottom:2px;"><i class="ph ph-buildings" style="color:var(--accent)"></i> Available Committees &amp; Portfolios</h2>
+          <div id="commSub" style="color:var(--muted);font-size:0.85rem;">All available committees and portfolios with remaining seats and MUN eligibility criteria</div>
+        </div>
+        <div class="filter-bar">
+          <input type="search" id="searchBox" placeholder="Search committee or portfolio...">
+          <button id="fAvailable" class="active"><i class="ph ph-chair"></i> Available Seats</button>
+          <button id="fEligAvail"><i class="ph ph-check-circle"></i> Eligible &amp; Available</button>
+          <button id="fAll"><i class="ph ph-list"></i> Show All (Incl. Full)</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Committee</th>
+              <th>Portfolio</th>
+              <th>Remaining Seats</th>
+              <th>Eligibility Required</th>
+              <th>Your Status</th>
+              <th style="text-align:right;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="commTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let data = null;
+let filterMode = "available"; // "available" (default) | "elig_avail" | "all"
+let chosenFile = null;
+
+function showBanner(text, isErr) {
+  const b = $("banner");
+  if (!text) { b.className = "banner"; b.textContent = ""; return; }
+  b.className = "banner " + (isErr ? "err" : "ok");
+  b.innerHTML = `<i class="ph ${isErr ? "ph-warning-circle" : "ph-check-circle"}"></i> `;
+  b.appendChild(document.createTextNode(text));
+}
+
+function escapeHtml(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+
+async function load() {
+  try {
+    const res = await fetch("/api/delegate/overview");
+    if (res.status === 401) { window.location.href = "/login.html"; return; }
+    if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Failed to load portal");
+    data = await res.json();
+    render();
+  } catch (e) { showBanner(e.message, true); }
+}
+
+function renderKPIs() {
+  const comms = data.committees || [];
+  const availComms = comms.filter(c => Number(c.seats_left || 0) > 0).length;
+  const availPorts = comms.reduce((s, c) => s + (c.portfolios || []).filter(p => p.available > 0).length, 0);
+  const totalRemainingSeats = comms.reduce((s, c) => s + Number(c.seats_left || 0), 0);
+  const cvVerified = Boolean(data.profile?.cv_verified);
+  const myMuns = data.profile?.mun_attend ?? 0;
+
+  $("kpiGrid").innerHTML = [
+    ["Verified MUN Score", cvVerified ? `${myMuns} MUN${myMuns === 1 ? "" : "s"}` : "Upload CV First"],
+    ["Available Committees", `${availComms} / ${comms.length}`],
+    ["Available Portfolios", availPorts],
+    ["Total Remaining Seats", totalRemainingSeats]
+  ].map(([label, val]) => `
+    <div class="kpi">
+      <div class="label">${label}</div>
+      <div class="val">${val}</div>
+    </div>
+  `).join("");
+}
+
+function renderTable() {
+  const tbody = $("commTableBody");
+  const q = ($("searchBox").value || "").trim().toLowerCase();
+  const cvVerified = Boolean(data.profile?.cv_verified);
+  const myMuns = Number(data.profile?.mun_attend || 0);
+  const rows = [];
+
+  for (const c of (data.committees || [])) {
+    const cPorts = c.portfolios || [];
+    if (!cPorts.length) {
+      if (filterMode === "all" && (!q || c.name.toLowerCase().includes(q))) {
+        rows.push({ c, pf: null });
+      }
+      continue;
+    }
+
+    for (const pf of cPorts) {
+      if (filterMode === "available" && pf.available <= 0) continue;
+      if (filterMode === "elig_avail" && (pf.available <= 0 || !c.eligible)) continue;
+      if (q && !c.name.toLowerCase().includes(q) && !pf.name.toLowerCase().includes(q)) continue;
+      rows.push({ c, pf });
+    }
+  }
+
+  if (!rows.length) {
+    const msg = (!cvVerified && filterMode === "elig_avail")
+      ? "Upload your CV above first to unlock eligible committees."
+      : "No available committees or portfolios match this filter.";
+    tbody.innerHTML = `<tr><td colspan="6" class="empty">${msg}</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = "";
+  rows.forEach(({ c, pf }) => {
+    const tr = document.createElement("tr");
+    if (!c.eligible) tr.className = "locked-row";
+
+    const reqMuns = Number(c.min_muns || 0);
+    const shortfall = Math.max(0, reqMuns - myMuns);
+    const eligRuleText = reqMuns === 0 ? "0 MUNs (Beginner Friendly)" : `${reqMuns}+ MUNs`;
+
+    let statusBadge;
+    if (!cvVerified) {
+      statusBadge = '<span class="badge pending"><i class="ph ph-file-arrow-up"></i> Upload CV First</span>';
+    } else if (c.eligible) {
+      statusBadge = '<span class="badge eligible"><i class="ph ph-check"></i> Eligible</span>';
+    } else {
+      statusBadge = `<span class="badge locked"><i class="ph ph-lock"></i> Need ${shortfall} more MUN${shortfall === 1 ? "" : "s"}</span>`;
+    }
+
+    const yourScoreSub = cvVerified
+      ? `Your verified score: ${myMuns} MUN${myMuns === 1 ? "" : "s"}`
+      : "Upload CV to verify score";
+
+    if (!pf) {
+      tr.innerHTML = `
+        <td><strong>${escapeHtml(c.name)}</strong></td>
+        <td style="color:var(--muted);font-style:italic;">No portfolios yet</td>
+        <td><span class="seat-num zero">0 left</span></td>
+        <td><strong>${eligRuleText}</strong><div class="meta">${yourScoreSub}</div></td>
+        <td>${statusBadge}</td>
+        <td style="text-align:right;color:var(--muted);">-</td>
+      `;
+      tbody.appendChild(tr);
+      return;
+    }
+
+    const seatText = pf.available > 0
+      ? `<span class="seat-num">${pf.available} seat${pf.available === 1 ? "" : "s"} left</span>`
+      : `<span class="seat-num zero">0 left (Full)</span>`;
+
+    tr.innerHTML = `
+      <td><strong>${escapeHtml(c.name)}</strong></td>
+      <td><strong>${escapeHtml(pf.name)}</strong></td>
+      <td>
+        ${seatText}
+        <div class="meta">${pf.filled} filled / ${pf.capacity} total capacity</div>
+      </td>
+      <td>
+        <strong>${eligRuleText}</strong>
+        <div class="meta">${yourScoreSub}</div>
+      </td>
+      <td>${statusBadge}</td>
+    `;
+
+    const tdAct = document.createElement("td");
+    tdAct.style.textAlign = "right";
+    const btn = document.createElement("button");
+    btn.className = "small primary";
+
+    if (pf.already_allocated) {
+      btn.disabled = true;
+      btn.textContent = "Acquired";
+    } else if (pf.pending_request) {
+      btn.disabled = true;
+      btn.textContent = "Pending Approval";
+    } else if (!cvVerified) {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="ph ph-lock"></i> Upload CV First';
+    } else if (!c.eligible) {
+      btn.disabled = true;
+      btn.textContent = "Ineligible";
+    } else if (pf.available <= 0) {
+      btn.disabled = true;
+      btn.textContent = "Full";
+    } else {
+      btn.innerHTML = '<i class="ph ph-paper-plane-tilt"></i> Request Seat';
+      btn.onclick = () => requestAllocate(c, pf);
+    }
+
+    tdAct.appendChild(btn);
+    tr.appendChild(tdAct);
+    tbody.appendChild(tr);
+  });
+}
+
+function render() {
+  const p = data.profile;
+  const cvVerified = Boolean(p.cv_verified);
+
+  $("userBadge").innerHTML = `<i class="ph ph-user"></i> ${escapeHtml(p.name)} (${escapeHtml(p.country)})`;
+
+  if (cvVerified) {
+    $("eligBadge").className = "pill elig";
+    $("eligBadge").innerHTML = `<i class="ph ph-certificate"></i> ${p.mun_attend} MUNs Verified`;
+    $("cvGateAlert").classList.add("hidden");
+    $("cvCard").classList.remove("highlight-step");
+    $("cvCardTitle").textContent = "Update Your CV (Re-Verify MUN Score)";
+    $("commSub").textContent = `Verified score: ${p.mun_attend} MUN(s). You can request open portfolios requiring ${p.mun_attend} or fewer MUNs.`;
+    // Put Committees Table on top once CV is verified
+    $("commSectionWrap").className = "card order-first";
+    $("cvSectionWrap").className = "grid-top order-second";
+  } else {
+    $("eligBadge").className = "pill warn";
+    $("eligBadge").innerHTML = '<i class="ph ph-warning"></i> Upload CV Required';
+    $("cvGateAlert").classList.remove("hidden");
+    $("cvCard").classList.add("highlight-step");
+    $("cvCardTitle").textContent = "Step 1: Upload Your CV First";
+    $("commSub").textContent = "Browse available committees below. Upload your CV above first to unlock Request Seat buttons.";
+    // Keep CV Upload at the very top until verified
+    $("cvSectionWrap").className = "grid-top order-first";
+    $("commSectionWrap").className = "card order-second";
+  }
+
+  renderKPIs();
+  renderTable();
+
+  // My Allocations
+  const aBox = $("myAllocs");
+  if (!data.my_allocations.length) {
+    aBox.innerHTML = '<div class="empty">No committees allocated yet. Verify your CV and request an eligible portfolio.</div>';
+  } else {
+    aBox.innerHTML = "";
+    data.my_allocations.forEach((a) => {
+      const row = document.createElement("div");
+      row.className = "alloc-item";
+      row.innerHTML = `
+        <div>
+          <div style="font-weight:700;">${escapeHtml(a.committee_name)} &rarr; ${escapeHtml(a.portfolio_name)}</div>
+          <div style="font-size:0.78rem;color:var(--muted);">Status: Confirmed Allocation</div>
+        </div>
+      `;
+      const btn = document.createElement("button");
+      btn.className = "danger small";
+      if (a.delete_requested) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="ph ph-hourglass"></i> Delete Requested';
+      } else {
+        btn.innerHTML = '<i class="ph ph-trash"></i> Request Delete';
+        btn.onclick = () => requestDelete(a);
+      }
+      row.appendChild(btn);
+      aBox.appendChild(row);
+    });
+  }
+
+  // My Requests
+  const rBox = $("myReqs");
+  if (!data.my_requests.length) {
+    rBox.innerHTML = '<div class="empty">No allocation or deletion requests submitted yet.</div>';
+  } else {
+    rBox.innerHTML = "";
+    data.my_requests.slice(0, 6).forEach((r) => {
+      const row = document.createElement("div");
+      row.className = "req-item";
+      const typeLabel = r.request_type === "allocate" ? "Acquire Seat" : "Delete Allocation";
+      row.innerHTML = `
+        <div>
+          <div style="font-weight:600;font-size:0.86rem;">${typeLabel}: ${escapeHtml(r.committee_name)} / ${escapeHtml(r.portfolio_name)}</div>
+          ${r.note ? `<div style="font-size:0.78rem;color:var(--muted);">Note: ${escapeHtml(r.note)}</div>` : ""}
+        </div>
+        <span class="badge ${r.status}">${escapeHtml(r.status)}</span>
+      `;
+      rBox.appendChild(row);
+    });
+  }
+}
+
+async function requestAllocate(comm, pf) {
+  const note = prompt(`Optional interest note for ${comm.name} -> ${pf.name}:`, "Interested in representing this portfolio");
+  if (note === null) return;
+  try {
+    const res = await fetch("/api/requests/allocate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ portfolio_id: pf.id, note })
+    });
+    const out = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(out.error || "Request failed");
+    showBanner(out.message, false);
+    load();
+  } catch (e) { showBanner(e.message, true); }
+}
+
+async function requestDelete(alloc) {
+  const note = prompt(`Reason for requesting deletion of ${alloc.committee_name} -> ${alloc.portfolio_name}:`, "Want to switch committee");
+  if (note === null) return;
+  try {
+    const res = await fetch("/api/requests/deallocate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ allocation_id: alloc.allocation_id, note })
+    });
+    const out = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(out.error || "Request failed");
+    showBanner(out.message, false);
+    load();
+  } catch (e) { showBanner(e.message, true); }
+}
+
+// CV upload handlers
+$("drop").onclick = () => $("cvFile").click();
+$("cvFile").onchange = () => {
+  chosenFile = $("cvFile").files[0] || null;
+  $("fileName").textContent = chosenFile ? chosenFile.name : "";
+  $("btnAnalyze").disabled = !chosenFile;
+};
+$("drop").ondragover = (e) => e.preventDefault();
+$("drop").ondrop = (e) => {
+  e.preventDefault();
+  if (e.dataTransfer.files.length) {
+    chosenFile = e.dataTransfer.files[0];
+    $("fileName").textContent = chosenFile.name;
+    $("btnAnalyze").disabled = false;
+  }
+};
+
+$("btnAnalyze").onclick = async () => {
+  if (!chosenFile) return;
+  $("btnAnalyze").disabled = true;
+  showBanner("");
+  const fd = new FormData();
+  fd.append("cv", chosenFile);
+  try {
+    const res = await fetch("/api/analyze", { method: "POST", body: fd });
+    const out = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(out.error || "CV analysis failed");
+    const score = out.updated_mun_attend ?? out.mun_count ?? 0;
+    $("cvOut").className = "cv-out show";
+    $("cvOut").innerHTML = `
+      <div><strong>Detected MUN Score:</strong> ${score} &bull; <strong>Location:</strong> ${escapeHtml(out.location || "Not found")}</div>
+      <div style="color:var(--success);margin-top:4px;font-weight:700;">CV Verified! Committees requiring ${score} or fewer MUNs are now unlocked.</div>
+    `;
+    showBanner(`CV verified with ${score} MUN(s)! Eligible committees are now unlocked.`, false);
+    load();
+  } catch (e) {
+    showBanner("CV Error: " + e.message, true);
+  } finally {
+    $("btnAnalyze").disabled = false;
+  }
+};
+
+// Filter buttons & search
+function setFilter(mode) {
+  filterMode = mode;
+  $("fAvailable").classList.toggle("active", mode === "available");
+  $("fEligAvail").classList.toggle("active", mode === "elig_avail");
+  $("fAll").classList.toggle("active", mode === "all");
+  renderTable();
+}
+$("fAvailable").onclick = () => setFilter("available");
+$("fEligAvail").onclick = () => setFilter("elig_avail");
+$("fAll").onclick = () => setFilter("all");
+$("searchBox").oninput = renderTable;
+$("btnRefresh").onclick = () => { showBanner(""); load(); };
+
+$("btnLogout").onclick = async () => {
+  await fetch("/api/auth/logout", { method: "POST" });
+  window.location.href = "/login.html";
+};
+
+load();
+</script>
+</body>
+</html>

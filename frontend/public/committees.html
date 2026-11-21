@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<!-- File: frontend/public/committees.html -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Committees - Programmer Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #0d1322 100%);
+      --card: rgba(23, 31, 48, 0.8);
+      --card-solid: #171f30;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --border: rgba(255, 255, 255, 0.09);
+      --border-accent: rgba(59, 130, 246, 0.35);
+      --track: rgba(255, 255, 255, 0.06);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.14);
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.14);
+      --warn: #f59e0b;
+      --warn-bg: rgba(245, 158, 11, 0.14);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg-gradient); color: var(--text); min-height: 100vh; padding-bottom: 60px; line-height: 1.5;
+    }
+    .navbar-outer {
+      position: sticky; top: 0; z-index: 100; background: var(--card); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border); margin-bottom: 28px;
+    }
+    .navbar {
+      max-width: 1200px; margin: 0 auto; padding: 12px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.12rem; color: var(--text); text-decoration: none; }
+    .brand-icon {
+      width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem;
+    }
+    nav { display: flex; gap: 6px; background: var(--track); padding: 4px; border-radius: 12px; border: 1px solid var(--border); flex-wrap: wrap; }
+    nav a {
+      padding: 8px 14px; border-radius: 8px; color: var(--muted); text-decoration: none;
+      font-size: 0.86rem; font-weight: 600; display: flex; align-items: center; gap: 6px;
+    }
+    nav a:hover { color: var(--text); }
+    nav a.on { background: var(--card-solid); color: var(--text); border: 1px solid var(--border); }
+    main { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; gap: 16px; flex-wrap: wrap; }
+    h1 { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-top: 3px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    button {
+      font-family: inherit; font-size: 0.85rem; font-weight: 600; padding: 9px 14px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--card-solid); color: var(--text); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
+    }
+    button:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--border-accent); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.primary { background: linear-gradient(135deg, var(--accent), #1d4ed8); color: #fff; border-color: var(--border-accent); }
+    button.success { background: var(--success-bg); color: var(--success); border-color: rgba(16,185,129,0.35); }
+    button.success:hover:not(:disabled) { background: var(--success); color: #fff; }
+    button.danger { background: var(--danger-bg); color: var(--danger); border-color: rgba(239,68,68,0.3); }
+    button.danger:hover:not(:disabled) { background: var(--danger); color: #fff; }
+    button.small { padding: 5px 10px; font-size: 0.78rem; border-radius: 8px; }
+    #banner { display: none; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 12px; margin-bottom: 18px; font-size: 0.9rem; font-weight: 600; }
+    #banner.ok { display: flex; background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.3); }
+    #banner.err { display: flex; background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+    .grid.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .card {
+      background: var(--card); backdrop-filter: blur(16px); border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px; margin-bottom: 22px;
+    }
+    .card.stat { margin-bottom: 0; }
+    .stat .label { font-size: 0.74rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .stat .value { font-size: 1.9rem; font-weight: 800; line-height: 1; }
+    .card h2 { font-size: 1.02rem; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .table-wrap { overflow-x: auto; border-radius: 12px; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 720px; }
+    th, td { text-align: left; padding: 11px 12px; font-size: 0.87rem; vertical-align: middle; }
+    th { color: var(--muted); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); background: var(--track); }
+    td { border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: 0; }
+    .badge { display: inline-flex; padding: 3px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
+    .badge.open, .badge.approved, .badge.allocate { background: var(--success-bg); color: var(--success); }
+    .badge.full, .badge.pending { background: var(--warn-bg); color: var(--warn); }
+    .badge.deallocate, .badge.rejected { background: var(--danger-bg); color: var(--danger); }
+    .chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; background: var(--track); border: 1px solid var(--border); margin: 2px 4px 2px 0; }
+    .chip button { padding: 0 3px; border: 0; background: transparent; color: var(--muted); font-size: 0.8rem; }
+    .chip button:hover { color: var(--danger); transform: none; }
+    .actions { white-space: nowrap; text-align: right; }
+    .actions button { margin-left: 5px; }
+    .empty { text-align: center; color: var(--muted); padding: 24px 12px; font-style: italic; }
+    dialog {
+      border: 1px solid var(--border); border-radius: 18px; background: var(--card-solid); color: var(--text);
+      padding: 24px; width: min(460px, 92vw); margin: auto;
+    }
+    dialog::backdrop { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+    label { display: block; font-size: 0.76rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin: 12px 0 5px; }
+    input, select { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--track); color: var(--text); font-family: inherit; font-size: 0.9rem; }
+    select option { background: var(--card-solid); color: var(--text); }
+    .dlg-err { color: var(--danger); font-size: 0.84rem; margin-top: 8px; min-height: 1.1em; }
+    .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+<div class="navbar-outer">
+  <div class="navbar">
+    <a href="/dashboard.html" class="brand">
+      <div class="brand-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
+      <span>MUN Programmer Portal</span>
+    </a>
+    <nav>
+      <a href="/dashboard.html"><i class="ph ph-squares-four"></i> Dashboard</a>
+      <a href="/delegates.html"><i class="ph ph-users-three"></i> Delegates</a>
+      <a href="/committees.html" class="on"><i class="ph ph-buildings"></i> Committees & Requests</a>
+      <a href="/index.html"><i class="ph ph-file-magnifying-glass"></i> CV Analyzer</a>
+    </nav>
+    <button id="btnLogout" class="danger small"><i class="ph ph-sign-out"></i> Logout</button>
+  </div>
+</div>
+
+<main>
+  <header>
+    <div>
+      <h1>Committees, Eligibility &amp; Delegate Requests</h1>
+      <div class="sub">Set committee MUN eligibility requirements, manage portfolios, and accept/reject delegate requests</div>
+    </div>
+    <div class="toolbar">
+      <button class="primary" id="btnAddCommittee"><i class="ph ph-plus-bold"></i> Add Committee</button>
+      <button id="btnAddPortfolio"><i class="ph ph-briefcase"></i> Add Portfolio</button>
+      <button class="success" id="btnAutoAllocate"><i class="ph ph-sparkle"></i> Auto-Allocate</button>
+      <button id="btnRefresh"><i class="ph ph-arrows-clockwise"></i> Refresh</button>
+    </div>
+  </header>
+
+  <div id="banner"></div>
+  <div class="grid stats" id="stats"></div>
+
+  <!-- Delegate Allocation & Delete Requests Queue -->
+  <div class="card">
+    <h2><i class="ph ph-bell-ringing" style="color:var(--warn)"></i> Delegate Allocation &amp; Deletion Requests</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Delegate (MUNs)</th>
+            <th>Committee / Portfolio</th>
+            <th>Delegate Note</th>
+            <th>Status</th>
+            <th style="text-align:right;">Action</th>
+          </tr>
+        </thead>
+        <tbody id="reqBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Committee Summary -->
+  <div class="card">
+    <h2><i class="ph ph-buildings" style="color:var(--accent)"></i> Committee Summary &amp; Eligibility Rules</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Committee</th>
+            <th>Min. Eligibility</th>
+            <th>Portfolios</th>
+            <th>Seats (Filled / Total)</th>
+            <th>Left</th>
+            <th style="text-align:right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="commBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Portfolio & Delegate Matrix -->
+  <div class="card">
+    <h2><i class="ph ph-table" style="color:var(--accent)"></i> Portfolio &amp; Delegate Allocation Matrix</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Committee</th>
+            <th>Portfolio</th>
+            <th>Capacity</th>
+            <th>Status</th>
+            <th>Allocated Delegate(s)</th>
+            <th style="text-align:right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="matrixBody"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- Committee Modal (with Min MUNs eligibility) -->
+<dialog id="dlgComm">
+  <form id="formComm">
+    <h3 id="commTitle">Add Committee</h3>
+    <label for="commName">Committee Name *</label>
+    <input id="commName" maxlength="100" placeholder="e.g. UNSC, UNHRC, UNGA" required>
+    <label for="commMinMuns">Minimum MUNs Required (Eligibility) *</label>
+    <input id="commMinMuns" type="number" min="0" value="0" required>
+    <div class="dlg-err" id="commErr"></div>
+    <div class="dlg-actions">
+      <button type="button" id="commCancel">Cancel</button>
+      <button type="submit" class="primary">Save Committee</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Portfolio Modal -->
+<dialog id="dlgPort">
+  <form id="formPort">
+    <h3 id="portTitle">Add Portfolio</h3>
+    <div id="portCommWrap">
+      <label for="portComm">Committee *</label>
+      <select id="portComm" required></select>
+    </div>
+    <label for="portName">Portfolio Name *</label>
+    <input id="portName" maxlength="100" placeholder="e.g. India, USA, France" required>
+    <label for="portCap">Seat Capacity *</label>
+    <input id="portCap" type="number" min="1" value="1" required>
+    <div class="dlg-err" id="portErr"></div>
+    <div class="dlg-actions">
+      <button type="button" id="portCancel">Cancel</button>
+      <button type="submit" class="primary">Save Portfolio</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Manual Allocate Modal -->
+<dialog id="dlgAlloc">
+  <form id="formAlloc">
+    <h3>Manual Allocate Delegate</h3>
+    <div style="font-size:0.86rem;color:var(--muted);margin-bottom:8px;" id="allocContext"></div>
+    <label for="allocSelect">Pick Registered Delegate</label>
+    <select id="allocSelect"></select>
+    <label for="allocCustom">Or Enter Delegate Name *</label>
+    <input id="allocCustom" maxlength="100" required>
+    <div class="dlg-err" id="allocErr"></div>
+    <div class="dlg-actions">
+      <button type="button" id="allocCancel">Cancel</button>
+      <button type="submit" class="primary">Allocate</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let state = { committees: [], delegates: [], requests: [] };
+let editingCommId = null, editingPort = null, allocTargetPort = null;
+
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+
+function showBanner(msg, isErr) {
+  const b = $("banner");
+  if (!msg) { b.className = ""; b.textContent = ""; return; }
+  b.className = isErr ? "err" : "ok";
+  b.textContent = msg;
+}
+
+async function api(url, opts) {
+  const res = await fetch(url, opts);
+  if (res.status === 401 || res.status === 403) { window.location.href = "/login.html"; throw new Error("Unauthorized"); }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Error (${res.status})`);
+  return data;
+}
+const jsonOpts = (method, body) => ({ method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+
+function renderStats(s, pendingCount) {
+  const items = [
+    ["Pending Requests", pendingCount],
+    ["Committees", s.committees ?? 0],
+    ["Portfolios", s.portfolios ?? 0],
+    ["Total Seats", s.total_seats ?? 0],
+    ["Seats Left", s.seats_left ?? 0]
+  ];
+  $("stats").innerHTML = items.map(([l, v]) => `
+    <div class="card stat">
+      <div class="label">${l}</div>
+      <div class="value">${v}</div>
+    </div>
+  `).join("");
+}
+
+function renderRequests() {
+  const tb = $("reqBody");
+  if (!state.requests.length) {
+    tb.innerHTML = '<tr><td colspan="6" class="empty">No delegate requests yet.</td></tr>';
+    return;
+  }
+  tb.innerHTML = "";
+  state.requests.forEach((r) => {
+    const tr = document.createElement("tr");
+    const typeLabel = r.request_type === "allocate" ? "Acquire Seat" : "Delete Allocation";
+    tr.innerHTML = `
+      <td><span class="badge ${r.request_type}">${typeLabel}</span></td>
+      <td><strong>${esc(r.delegate_name)}</strong> <span style="color:var(--muted);font-size:0.8rem;">(${r.delegate_muns} MUNs)</span></td>
+      <td>${esc(r.committee_name)} &rarr; <strong>${esc(r.portfolio_name)}</strong> <span style="color:var(--muted);font-size:0.78rem;">(min ${r.min_muns})</span></td>
+      <td style="color:var(--muted);">${esc(r.note || "-")}</td>
+      <td><span class="badge ${r.status}">${esc(r.status)}</span></td>
+    `;
+    const tdAct = document.createElement("td");
+    tdAct.className = "actions";
+    if (r.status === "pending") {
+      const bAcc = document.createElement("button");
+      bAcc.className = "small success";
+      bAcc.innerHTML = '<i class="ph ph-check"></i> Accept';
+      bAcc.onclick = () => handleRequest(r.request_id, "approve");
+
+      const bRej = document.createElement("button");
+      bRej.className = "small danger";
+      bRej.innerHTML = '<i class="ph ph-x"></i> Reject';
+      bRej.onclick = () => handleRequest(r.request_id, "reject");
+
+      tdAct.append(bAcc, bRej);
+    } else {
+      tdAct.innerHTML = '<span style="color:var(--muted);font-size:0.8rem;">Reviewed</span>';
+    }
+    tr.appendChild(tdAct);
+    tb.appendChild(tr);
+  });
+}
+
+function renderCommittees() {
+  const tb = $("commBody");
+  if (!state.committees.length) {
+    tb.innerHTML = '<tr><td colspan="7" class="empty">No committees yet.</td></tr>';
+    return;
+  }
+  tb.innerHTML = "";
+  state.committees.forEach((c, idx) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${idx + 1}</td>
+      <td><strong>${esc(c.name)}</strong></td>
+      <td><span class="badge open">${c.min_muns}+ MUNs</span></td>
+      <td>${c.portfolios.length}</td>
+      <td>${c.filled_seats} / ${c.total_seats}</td>
+      <td>${c.seats_left}</td>
+    `;
+    const act = document.createElement("td");
+    act.className = "actions";
+    const bP = document.createElement("button"); bP.className = "small"; bP.textContent = "+ Portfolio"; bP.onclick = () => openPortModal(null, c.id);
+    const bE = document.createElement("button"); bE.className = "small"; bE.textContent = "Edit"; bE.onclick = () => openCommModal(c);
+    const bD = document.createElement("button"); bD.className = "small danger"; bD.textContent = "Delete"; bD.onclick = () => deleteCommittee(c);
+    act.append(bP, bE, bD);
+    tr.appendChild(act);
+    tb.appendChild(tr);
+  });
+}
+
+function renderMatrix() {
+  const tb = $("matrixBody");
+  const rows = [];
+  for (const c of state.committees) {
+    for (const p of c.portfolios) rows.push({ c, p });
+  }
+  if (!rows.length) {
+    tb.innerHTML = '<tr><td colspan="6" class="empty">No portfolios configured yet.</td></tr>';
+    return;
+  }
+  tb.innerHTML = "";
+  rows.forEach(({ c, p }) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><strong>${esc(c.name)}</strong></td>
+      <td>${esc(p.name)}</td>
+      <td>${p.filled} / ${p.capacity}</td>
+      <td><span class="badge ${p.available > 0 ? "open" : "full"}">${p.available > 0 ? "OPEN" : "FULL"}</span></td>
+    `;
+    const tdAll = document.createElement("td");
+    if (!p.allocations.length) {
+      tdAll.innerHTML = '<span style="color:var(--muted);">Unassigned</span>';
+    } else {
+      p.allocations.forEach((a) => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.appendChild(document.createTextNode(a.delegate_name));
+        const rm = document.createElement("button");
+        rm.innerHTML = "&times;";
+        rm.title = "Delete allocation";
+        rm.onclick = () => deleteAllocation(a);
+        chip.appendChild(rm);
+        tdAll.appendChild(chip);
+      });
+    }
+    const tdAct = document.createElement("td");
+    tdAct.className = "actions";
+    const bAl = document.createElement("button"); bAl.className = "small success"; bAl.textContent = "Allocate"; bAl.disabled = p.available <= 0; bAl.onclick = () => openAllocModal(c, p);
+    const bEd = document.createElement("button"); bEd.className = "small"; bEd.textContent = "Edit"; bEd.onclick = () => openPortModal(p, c.id);
+    const bDl = document.createElement("button"); bDl.className = "small danger"; bDl.textContent = "Del"; bDl.onclick = () => deletePortfolio(p);
+    tdAct.append(bAl, bEd, bDl);
+    tr.append(tdAll, tdAct);
+    tb.appendChild(tr);
+  });
+}
+
+async function load() {
+  try {
+    const [commData, delegates, requests] = await Promise.all([
+      api("/api/committees"),
+      api("/api/delegates"),
+      api("/api/requests")
+    ]);
+    state.committees = commData.committees || [];
+    state.delegates = delegates || [];
+    state.requests = requests || [];
+    const pendingCount = state.requests.filter(r => r.status === "pending").length;
+    renderStats(commData.summary || {}, pendingCount);
+    renderRequests();
+    renderCommittees();
+    renderMatrix();
+  } catch (e) { if (e.message !== "Unauthorized") showBanner(e.message, true); }
+}
+
+async function handleRequest(id, action) {
+  try {
+    const out = await api(`/api/requests/${id}/${action}`, { method: "POST" });
+    showBanner(out.message, false);
+    load();
+  } catch (e) { showBanner(e.message, true); }
+}
+
+function openCommModal(c) {
+  editingCommId = c ? c.id : null;
+  $("commTitle").textContent = c ? "Edit Committee & Eligibility" : "Add Committee";
+  $("commName").value = c ? c.name : "";
+  $("commMinMuns").value = c ? c.min_muns : 0;
+  $("commErr").textContent = "";
+  $("dlgComm").showModal();
+}
+
+function openPortModal(p, cid) {
+  if (!state.committees.length && !p) return showBanner("Add a committee first.", true);
+  editingPort = p || null;
+  $("portTitle").textContent = p ? "Edit Portfolio" : "Add Portfolio";
+  $("portCommWrap").style.display = p ? "none" : "block";
+  $("portComm").innerHTML = state.committees.map(c => `<option value="${c.id}" ${c.id === cid ? "selected" : ""}>${esc(c.name)}</option>`).join("");
+  $("portName").value = p ? p.name : "";
+  $("portCap").value = p ? p.capacity : 1;
+  $("portErr").textContent = "";
+  $("dlgPort").showModal();
+}
+
+function openAllocModal(c, p) {
+  allocTargetPort = p;
+  $("allocContext").textContent = `${c.name} -> ${p.name} (Min ${c.min_muns}+ MUNs, ${p.available} seat left)`;
+  $("allocSelect").innerHTML = '<option value="">-- Select delegate --</option>' +
+    state.delegates.map(d => `<option value="${esc(d.name)}">${esc(d.name)} (${d.mun_attend} MUNs)</option>`).join("");
+  $("allocCustom").value = "";
+  $("allocErr").textContent = "";
+  $("dlgAlloc").showModal();
+}
+
+$("allocSelect").onchange = () => { if ($("allocSelect").value) $("allocCustom").value = $("allocSelect").value; };
+
+$("formComm").onsubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const body = { name: $("commName").value.trim(), min_muns: Number($("commMinMuns").value) };
+    if (editingCommId) await api(`/api/committees/${editingCommId}`, jsonOpts("PUT", body));
+    else await api("/api/committees", jsonOpts("POST", body));
+    $("dlgComm").close();
+    showBanner("Committee saved.", false);
+    load();
+  } catch (err) { $("commErr").textContent = err.message; }
+};
+
+$("formPort").onsubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const body = { name: $("portName").value.trim(), capacity: Number($("portCap").value) };
+    if (editingPort) await api(`/api/portfolios/${editingPort.id}`, jsonOpts("PUT", body));
+    else await api(`/api/committees/${$("portComm").value}/portfolios`, jsonOpts("POST", body));
+    $("dlgPort").close();
+    showBanner("Portfolio saved.", false);
+    load();
+  } catch (err) { $("portErr").textContent = err.message; }
+};
+
+$("formAlloc").onsubmit = async (e) => {
+  e.preventDefault();
+  try {
+    await api("/api/allocations", jsonOpts("POST", { portfolio_id: allocTargetPort.id, delegate_name: $("allocCustom").value.trim() }));
+    $("dlgAlloc").close();
+    showBanner("Delegate allocated.", false);
+    load();
+  } catch (err) { $("allocErr").textContent = err.message; }
+};
+
+async function deleteCommittee(c) {
+  if (!confirm(`Delete committee '${c.name}' and all its portfolios?`)) return;
+  try { await api(`/api/committees/${c.id}`, { method: "DELETE" }); showBanner("Committee deleted.", false); load(); }
+  catch (e) { showBanner(e.message, true); }
+}
+
+async function deletePortfolio(p) {
+  if (!confirm(`Delete portfolio '${p.name}'?`)) return;
+  try { await api(`/api/portfolios/${p.id}`, { method: "DELETE" }); showBanner("Portfolio deleted.", false); load(); }
+  catch (e) { showBanner(e.message, true); }
+}
+
+async function deleteAllocation(a) {
+  if (!confirm(`Remove '${a.delegate_name}' from this portfolio?`)) return;
+  try { await api(`/api/allocations/${a.id}`, { method: "DELETE" }); showBanner("Allocation removed.", false); load(); }
+  catch (e) { showBanner(e.message, true); }
+}
+
+$("btnAddCommittee").onclick = () => openCommModal(null);
+$("btnAddPortfolio").onclick = () => openPortModal(null, state.committees[0]?.id);
+$("btnRefresh").onclick = () => { showBanner(""); load(); };
+$("btnAutoAllocate").onclick = async () => {
+  if (!confirm("Auto-allocate unallocated delegates by MUN experience respecting committee eligibility?")) return;
+  try {
+    const out = await api("/api/allocations/auto", { method: "POST" });
+    showBanner(out.allocated_count ? `Auto-allocated ${out.allocated_count} delegate(s).` : (out.message || "Nothing allocated."), false);
+    load();
+  } catch (e) { showBanner(e.message, true); }
+};
+
+$("commCancel").onclick = () => $("dlgComm").close();
+$("portCancel").onclick = () => $("dlgPort").close();
+$("allocCancel").onclick = () => $("dlgAlloc").close();
+$("btnLogout").onclick = async () => { await fetch("/api/auth/logout", { method: "POST" }); window.location.href = "/login.html"; };
+
+load();
+</script>
+</body>
+</html>

@@ -1,509 +1,131 @@
 <!DOCTYPE html>
+<!-- File: frontend/public/delegates.html -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MUN Management System - Delegates</title>
+<title>Delegates - Programmer Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
   :root {
-    --bg: #0f172a;
-    --bg-page: #f8fafc;
-    --card: #ffffff;
-    --card-border: #e2e8f0;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-    --accent: #2563eb;
-    --accent-hover: #1d4ed8;
-    --accent-light: #eff6ff;
-    --accent-border: #bfdbfe;
+    --bg: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #0d1322 100%);
+    --card: rgba(23, 31, 48, 0.8);
+    --solid: #171f30;
+    --text: #f3f4f6;
+    --muted: #9ca3af;
+    --accent: #3b82f6;
+    --border: rgba(255, 255, 255, 0.09);
+    --track: rgba(255, 255, 255, 0.06);
     --danger: #ef4444;
-    --danger-hover: #dc2626;
-    --danger-light: #fef2f2;
-    --chip-bg: #f1f5f9;
-    --chip-text: #334155;
-    --chip-border: #e2e8f0;
-    --table-stripe: #f8fafc;
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --glass-bg: rgba(255, 255, 255, 0.85);
+    --danger-bg: rgba(239, 68, 68, 0.14);
   }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #030712;
-      --bg-page: #0b0f17;
-      --card: #111827;
-      --card-border: #1f2937;
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
-      --accent: #3b82f6;
-      --accent-hover: #60a5fa;
-      --accent-light: rgba(59, 130, 246, 0.12);
-      --accent-border: rgba(59, 130, 246, 0.3);
-      --danger: #f87171;
-      --danger-hover: #ef4444;
-      --danger-light: rgba(248, 113, 113, 0.12);
-      --chip-bg: #1f2937;
-      --chip-text: #e5e7eb;
-      --chip-border: #374151;
-      --table-stripe: rgba(31, 41, 55, 0.3);
-      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
-      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
-      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
-      --glass-bg: rgba(17, 24, 39, 0.85);
-    }
-  }
-
-  * { box-sizing: border-box; }
-  
-  body {
-    margin: 0;
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    background-color: var(--bg-page);
-    color: var(--text-main);
-    padding: 24px 16px 48px;
-    min-height: 100vh;
-  }
-
-  main {
-    max-width: 1120px;
-    margin: 0 auto;
-  }
-
-  /* Navigation Bar */
-  nav {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
-    background: var(--card);
-    padding: 6px;
-    border-radius: 14px;
-    border: 1px solid var(--card-border);
-    box-shadow: var(--shadow-sm);
-    width: fit-content;
-  }
-
-  nav a {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 10px;
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 0.88rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  nav a.on {
-    background: var(--accent);
-    color: #ffffff;
-    font-weight: 600;
-    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
-  }
-
-  nav a:not(.on):hover {
-    color: var(--text-main);
-    background: var(--chip-bg);
-  }
-
-  /* Header */
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
-  h1 {
-    margin: 0;
-    font-size: 1.65rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    background: linear-gradient(135deg, var(--text-main) 30%, var(--text-muted));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .sub {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-top: 2px;
-  }
-
-  #count {
-    font-weight: 600;
-    color: var(--accent);
-    background: var(--accent-light);
-    border: 1px solid var(--accent-border);
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 0.82rem;
-  }
-
-  /* Control Bar */
-  .bar {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 12px;
-    align-items: center;
-  }
-
-  .search-wrap {
-    position: relative;
-    flex: 1;
-  }
-
-  .search-wrap i {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-    font-size: 1.1rem;
-    pointer-events: none;
-  }
-
-  input, button {
-    font-family: inherit;
-  }
-
-  input {
-    padding: 11px 14px 11px 42px;
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    background: var(--card);
-    color: var(--text-main);
-    width: 100%;
-    font-size: 0.92rem;
-    outline: none;
-    transition: all 0.2s;
-    box-shadow: var(--shadow-sm);
-  }
-
-  input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-light);
-  }
-
-  button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 11px 18px;
-    border: 0;
-    border-radius: 12px;
-    cursor: pointer;
-    background: var(--accent);
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.92rem;
-    white-space: nowrap;
-    transition: all 0.2s ease;
-    box-shadow: var(--shadow-sm);
-  }
-
-  button:hover {
-    background: var(--accent-hover);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-  }
-
-  button.ghost {
-    background: var(--card);
-    color: var(--text-main);
-    border: 1px solid var(--card-border);
-    box-shadow: var(--shadow-sm);
-  }
-
-  button.ghost:hover {
-    background: var(--chip-bg);
-    border-color: var(--text-muted);
-  }
-
-  button.small {
-    padding: 6px 12px;
-    font-size: 0.82rem;
-    border-radius: 8px;
-  }
-
-  button.danger {
-    background: var(--danger-light);
-    color: var(--danger);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-  }
-
-  button.danger:hover {
-    background: var(--danger);
-    color: #fff;
-  }
-
-  #msg {
-    margin: 8px 0 16px;
-    min-height: 1.2em;
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    padding: 4px 8px;
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
-
-  #msg.err {
-    color: var(--danger);
-    background: var(--danger-light);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    display: inline-block;
-  }
-
-  /* Table Card */
-  .card {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-  }
-
-  .table-responsive {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
-  }
-
-  th, td {
-    text-align: left;
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--card-border);
-    font-size: 0.9rem;
-    vertical-align: middle;
-  }
-
-  th {
-    background: var(--chip-bg);
-    color: var(--text-muted);
-    font-weight: 700;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  tr:last-child td {
-    border-bottom: 0;
-  }
-
-  tr:hover td {
-    background-color: var(--table-stripe);
-  }
-
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    background: var(--chip-bg);
-    color: var(--chip-text);
-    border: 1px solid var(--chip-border);
-    border-radius: 999px;
-    padding: 3px 10px;
-    font-size: 0.78rem;
-    font-weight: 500;
-    margin: 2px 4px 2px 0;
-  }
-
-  .none {
-    color: var(--text-muted);
-    font-style: italic;
-  }
-
-  .actions {
-    white-space: nowrap;
-    text-align: right;
-  }
-
-  .actions button {
-    margin-left: 6px;
-  }
-
-  .empty {
-    padding: 48px 16px;
-    text-align: center;
-    color: var(--text-muted);
-  }
-
-  .empty i {
-    font-size: 2.5rem;
-    margin-bottom: 8px;
-    display: block;
-    opacity: 0.6;
-  }
-
-  /* Dialog Modal */
-  dialog {
-    border: 1px solid var(--card-border);
-    border-radius: 20px;
-    background: var(--card);
-    color: var(--text-main);
-    padding: 28px;
-    width: min(520px, 92vw);
-    max-height: 88vh;
-    overflow-y: auto;
-    box-shadow: var(--shadow-lg);
-  }
-
-  dialog::backdrop {
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(4px);
-  }
-
-  dialog h2 {
-    margin: 0 0 18px;
-    font-size: 1.25rem;
-    font-weight: 700;
-  }
-
-  label {
-    display: block;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin: 14px 0 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-
-  dialog input {
-    padding: 10px 14px;
-  }
-
-  .two {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .listrow {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 8px;
-    align-items: center;
-  }
-
-  .listrow input {
-    flex: 1;
-  }
-
-  .row {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid var(--card-border);
-  }
-
-  #formErr {
-    color: var(--danger);
-    font-size: 0.85rem;
-    min-height: 1.1em;
-    margin-top: 12px;
-  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 50px; }
+  .navbar-outer { position: sticky; top: 0; z-index: 100; background: var(--card); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); margin-bottom: 28px; }
+  .navbar { max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.12rem; color: var(--text); text-decoration: none; }
+  .brand-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), #1d4ed8); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem; }
+  nav { display: flex; gap: 6px; background: var(--track); padding: 4px; border-radius: 12px; border: 1px solid var(--border); flex-wrap: wrap; }
+  nav a { padding: 8px 14px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 0.86rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+  nav a:hover { color: var(--text); }
+  nav a.on { background: var(--solid); color: var(--text); border: 1px solid var(--border); }
+  main { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
+  h1 { font-size: 1.65rem; font-weight: 800; }
+  .sub { color: var(--muted); font-size: 0.9rem; }
+  .bar { display: flex; gap: 10px; margin-bottom: 14px; }
+  input, button { font-family: inherit; }
+  input { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--track); color: var(--text); width: 100%; font-size: 0.9rem; outline: none; }
+  input:focus { border-color: var(--accent); }
+  button { padding: 9px 15px; border-radius: 10px; border: 1px solid var(--border); background: var(--solid); color: var(--text); font-weight: 600; font-size: 0.86rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  button.primary { background: linear-gradient(135deg, var(--accent), #1d4ed8); color: #fff; border: 0; }
+  button.danger { background: var(--danger-bg); color: var(--danger); border-color: rgba(239,68,68,0.3); }
+  button.small { padding: 5px 10px; font-size: 0.78rem; border-radius: 8px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 780px; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+  th { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; background: var(--track); }
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; background: var(--track); border: 1px solid var(--border); font-size: 0.76rem; margin: 2px 4px 2px 0; }
+  .actions { text-align: right; white-space: nowrap; }
+  .actions button { margin-left: 6px; }
+  #msg { margin-bottom: 12px; font-size: 0.88rem; color: var(--muted); min-height: 1.2em; }
+  #msg.err { color: var(--danger); }
+  dialog { border: 1px solid var(--border); border-radius: 18px; background: var(--solid); color: var(--text); padding: 24px; width: min(500px, 92vw); margin: auto; }
+  dialog::backdrop { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+  label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin: 12px 0 5px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .listrow { display: flex; gap: 6px; margin-bottom: 6px; }
+  .row { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--border); }
 </style>
 </head>
 <body>
-<main>
-  <nav>
-    <a href="/dashboard.html"><i class="ph ph-chart-pie-slice"></i> Dashboard</a>
-    <a href="/delegates.html" class="on"><i class="ph ph-users-three"></i> Delegates</a>
-    <a href="/"><i class="ph ph-file-text"></i> CV Analyzer</a>
-  </nav>
 
+<div class="navbar-outer">
+  <div class="navbar">
+    <a href="/dashboard.html" class="brand">
+      <div class="brand-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
+      <span>MUN Programmer Portal</span>
+    </a>
+    <nav>
+      <a href="/dashboard.html"><i class="ph ph-squares-four"></i> Dashboard</a>
+      <a href="/delegates.html" class="on"><i class="ph ph-users-three"></i> Delegates</a>
+      <a href="/committees.html"><i class="ph ph-buildings"></i> Committees & Requests</a>
+      <a href="/index.html"><i class="ph ph-file-magnifying-glass"></i> CV Analyzer</a>
+    </nav>
+    <button id="btnLogout" class="danger small"><i class="ph ph-sign-out"></i> Logout</button>
+  </div>
+</div>
+
+<main>
   <header>
     <div>
-      <h1>MUN Management System</h1>
-      <div class="sub">Delegate roster and global profile management</div>
+      <h1>Delegate Roster Management</h1>
+      <div class="sub">View, search, add, update, or delete registered delegates</div>
     </div>
-    <div id="count">0 delegates</div>
+    <div id="count" style="font-weight:700;color:var(--accent);">0 delegates</div>
   </header>
 
   <div class="bar">
-    <div class="search-wrap">
-      <i class="ph ph-magnifying-glass"></i>
-      <input type="search" id="q" placeholder="Search by name, country, age, committee or award...">
-    </div>
-    <button id="addBtn"><i class="ph ph-plus-bold"></i> Add Delegate</button>
+    <input type="search" id="q" placeholder="Search by name, country, age, committee or award...">
+    <button id="addBtn" class="primary"><i class="ph ph-plus-bold"></i> Add Delegate</button>
   </div>
   <div id="msg"></div>
 
   <div class="card">
-    <div class="table-responsive">
+    <div class="table-wrap">
       <table>
         <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Country</th>
-            <th>MUNs</th>
-            <th>Previous committees</th>
-            <th>Awards</th>
-            <th style="text-align: right;">Actions</th>
-          </tr>
+          <tr><th>ID</th><th>Name</th><th>Age</th><th>Country</th><th>MUNs</th><th>Previous Committees</th><th>Awards</th><th style="text-align:right;">Actions</th></tr>
         </thead>
         <tbody id="tbody"></tbody>
       </table>
-    </div>
-    <div id="empty" class="empty" hidden>
-      <i class="ph ph-users-square"></i>
-      No delegates found matching your query.
     </div>
   </div>
 </main>
 
 <dialog id="dlg">
-  <form id="form" novalidate>
-    <h2 id="dlgTitle">Add Delegate</h2>
-
-    <label for="f_name">Name *</label>
-    <input id="f_name" maxlength="100" placeholder="e.g. Eleanor Vance" required>
-
+  <form id="form">
+    <h2 id="dlgTitle" style="margin-bottom:10px;">Add Delegate</h2>
+    <label>Name *</label><input id="f_name" maxlength="100" required>
     <div class="two">
-      <div>
-        <label for="f_age">Age *</label>
-        <input id="f_age" type="number" min="1" max="120" placeholder="21" required>
-      </div>
-      <div>
-        <label for="f_mun">MUNs attended *</label>
-        <input id="f_mun" type="number" min="0" value="0" required>
-      </div>
+      <div><label>Age *</label><input id="f_age" type="number" min="1" max="120" required></div>
+      <div><label>MUNs Attended *</label><input id="f_mun" type="number" min="0" value="0" required></div>
     </div>
-
-    <label for="f_country">Country *</label>
-    <input id="f_country" maxlength="100" placeholder="e.g. France" required>
-
-    <label>Previous committees</label>
+    <label>Country *</label><input id="f_country" maxlength="100" required>
+    <label>Previous Committees</label>
     <div id="committees"></div>
-    <button type="button" class="ghost small" id="addCommittee"><i class="ph ph-plus-bold"></i> Add committee</button>
-
+    <button type="button" class="small" id="addCommittee">+ Add Committee</button>
     <label>Awards</label>
     <div id="awards"></div>
-    <button type="button" class="ghost small" id="addAward"><i class="ph ph-plus-bold"></i> Add award</button>
-
-    <div id="formErr"></div>
+    <button type="button" class="small" id="addAward">+ Add Award</button>
+    <div id="formErr" style="color:var(--danger);font-size:0.84rem;margin-top:8px;"></div>
     <div class="row">
-      <button type="button" class="ghost" id="cancel">Cancel</button>
-      <button type="submit"><i class="ph ph-check-bold"></i> Save Delegate</button>
+      <button type="button" id="cancel">Cancel</button>
+      <button type="submit" class="primary">Save Delegate</button>
     </div>
   </form>
 </dialog>
@@ -512,196 +134,91 @@
 const $ = (id) => document.getElementById(id);
 let editingId = null;
 
-function say(text, isErr) { 
-  $("msg").textContent = text || ""; 
-  $("msg").className = isErr ? "err" : ""; 
-}
-
-// Fallback Mock Data for local previewing without a live API server
-const MOCK_DELEGATES = [
-  { id: 101, name: "Alexander Wright", age: 22, country: "United Kingdom", mun_attend: 8, committees: ["UNSC", "DISEC"], awards: ["Best Delegate", "Honorable Mention"] },
-  { id: 102, name: "Sophia Chen", age: 20, country: "Canada", mun_attend: 4, committees: ["SOCHUM", "UNHCR"], awards: ["Outstanding Delegate"] },
-  { id: 103, name: "Marcus Vance", age: 19, country: "Germany", mun_attend: 1, committees: ["ECOFIN"], awards: [] }
-];
+function say(t, err) { $("msg").textContent = t || ""; $("msg").className = err ? "err" : ""; }
 
 async function api(url, opts) {
-  try {
-    const res = await fetch(url, opts);
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || "Request failed");
-    return data;
-  } catch (e) {
-    // If backend endpoint is missing during static preview, use mock data fallback
-    if (url.startsWith("/api/delegates")) {
-      console.warn("Backend API unavailable. Using preview fallback dataset.");
-      const q = new URLSearchParams(url.split("?")[1] || "").get("q") || "";
-      return MOCK_DELEGATES.filter(d => 
-        !q || JSON.stringify(d).toLowerCase().includes(q.toLowerCase())
-      );
-    }
-    throw e;
-  }
+  const res = await fetch(url, opts);
+  if (res.status === 401 || res.status === 403) { window.location.href = "/login.html"; throw new Error("Unauthorized"); }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Request failed");
+  return data;
 }
+const send = (method, body) => ({ method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
 
-const send = (method, body) => ({ 
-  method, 
-  headers: { "Content-Type": "application/json" }, 
-  body: JSON.stringify(body) 
-});
-
-// ----- Table Rendering -----
 async function load() {
   try {
     const list = await api("/api/delegates?q=" + encodeURIComponent($("q").value));
-    render(list);
-  } catch (e) { 
-    say(e.message, true); 
-  }
-}
-
-function chips(items) {
-  const td = document.createElement("td");
-  if (!items || !items.length) { 
-    td.className = "none"; 
-    td.textContent = "-"; 
-    return td; 
-  }
-  items.forEach((t) => { 
-    const s = document.createElement("span"); 
-    s.className = "chip"; 
-    s.textContent = t; 
-    td.appendChild(s); 
-  });
-  return td;
-}
-
-function render(list) {
-  $("count").textContent = list.length + (list.length === 1 ? " delegate" : " delegates");
-  $("tbody").replaceChildren(...list.map((d) => {
-    const tr = document.createElement("tr");
-    
-    // Core details
-    [d.id, d.name, d.age, d.country, d.mun_attend].forEach((v, idx) => {
-      const td = document.createElement("td"); 
-      td.textContent = v; 
-      if (idx === 1) td.style.fontWeight = "600";
-      tr.appendChild(td);
+    $("count").textContent = list.length + (list.length === 1 ? " delegate" : " delegates");
+    const tb = $("tbody");
+    tb.innerHTML = "";
+    if (!list.length) {
+      tb.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px;">No delegates found.</td></tr>';
+      return;
+    }
+    list.forEach(d => {
+      const tr = document.createElement("tr");
+      [d.id, d.name, d.age, d.country, d.mun_attend].forEach((v, i) => {
+        const td = document.createElement("td"); td.textContent = v; if (i === 1) td.style.fontWeight = "700"; tr.appendChild(td);
+      });
+      const mkChips = (arr) => {
+        const td = document.createElement("td");
+        if (!arr || !arr.length) { td.textContent = "-"; td.style.color = "var(--muted)"; return td; }
+        arr.forEach(x => { const s = document.createElement("span"); s.className = "chip"; s.textContent = x; td.appendChild(s); });
+        return td;
+      };
+      tr.append(mkChips(d.committees), mkChips(d.awards));
+      const tdAct = document.createElement("td"); tdAct.className = "actions";
+      const bE = document.createElement("button"); bE.className = "small"; bE.textContent = "Edit"; bE.onclick = () => openForm(d);
+      const bD = document.createElement("button"); bD.className = "small danger"; bD.textContent = "Delete"; bD.onclick = () => remove(d);
+      tdAct.append(bE, bD); tr.appendChild(tdAct); tb.appendChild(tr);
     });
-
-    // Chips & Actions
-    tr.appendChild(chips(d.committees));
-    tr.appendChild(chips(d.awards));
-
-    const td = document.createElement("td"); 
-    td.className = "actions";
-    
-    const edit = document.createElement("button"); 
-    edit.className = "small ghost"; 
-    edit.innerHTML = '<i class="ph ph-pencil"></i> Edit'; 
-    edit.onclick = () => openForm(d);
-
-    const del = document.createElement("button"); 
-    del.className = "small danger"; 
-    del.innerHTML = '<i class="ph ph-trash"></i> Delete'; 
-    del.onclick = () => remove(d);
-
-    td.append(edit, del); 
-    tr.appendChild(td);
-    return tr;
-  }));
-  
-  $("empty").hidden = list.length > 0;
+  } catch (e) { if (e.message !== "Unauthorized") say(e.message, true); }
 }
 
-// ----- Dynamic Form Helper -----
-function addRow(containerId, value) {
-  const row = document.createElement("div"); 
-  row.className = "listrow";
-  
-  const input = document.createElement("input"); 
-  input.maxLength = 150; 
-  input.value = value || "";
-  input.placeholder = containerId === "committees" ? "e.g. UNSC" : "e.g. Best Delegate";
-
-  const x = document.createElement("button"); 
-  x.type = "button"; 
-  x.className = "ghost small danger"; 
-  x.innerHTML = '<i class="ph ph-x-bold"></i>'; 
-  x.title = "Remove";
-  x.onclick = () => row.remove();
-
-  row.append(input, x);
-  $(containerId).appendChild(row);
-  return input;
+function addRow(id, val) {
+  const row = document.createElement("div"); row.className = "listrow";
+  const inp = document.createElement("input"); inp.value = val || "";
+  const x = document.createElement("button"); x.type = "button"; x.className = "small danger"; x.textContent = "x"; x.onclick = () => row.remove();
+  row.append(inp, x); $(id).appendChild(row); return inp;
 }
-
-const readRows = (id) => [...$(id).querySelectorAll("input")].map((i) => i.value.trim()).filter(Boolean);
+const readRows = (id) => [...$(id).querySelectorAll("input")].map(i => i.value.trim()).filter(Boolean);
 
 function openForm(d) {
   editingId = d ? d.id : null;
-  $("dlgTitle").textContent = d ? "Update Delegate Profile" : "Add New Delegate";
+  $("dlgTitle").textContent = d ? "Edit Delegate" : "Add Delegate";
   $("f_name").value = d ? d.name : "";
   $("f_age").value = d ? d.age : "";
   $("f_mun").value = d ? d.mun_attend : 0;
   $("f_country").value = d ? d.country : "";
-  
-  $("committees").replaceChildren(); 
-  $("awards").replaceChildren();
-
-  (d ? d.committees : []).forEach((c) => addRow("committees", c));
-  (d ? d.awards : []).forEach((a) => addRow("awards", a));
-  
+  $("committees").innerHTML = ""; $("awards").innerHTML = "";
+  (d ? d.committees : []).forEach(c => addRow("committees", c));
+  (d ? d.awards : []).forEach(a => addRow("awards", a));
   $("formErr").textContent = "";
   $("dlg").showModal();
-  $("f_name").focus();
 }
 
-// ----- Event Listeners -----
-$("form").addEventListener("submit", async (e) => {
+$("form").onsubmit = async (e) => {
   e.preventDefault();
-  const body = {
-    name: $("f_name").value, 
-    age: $("f_age").value, 
-    mun_attend: $("f_mun").value,
-    country: $("f_country").value, 
-    committees: readRows("committees"), 
-    awards: readRows("awards"),
-  };
+  const body = { name: $("f_name").value, age: $("f_age").value, mun_attend: $("f_mun").value, country: $("f_country").value, committees: readRows("committees"), awards: readRows("awards") };
   try {
     if (editingId) await api("/api/delegates/" + editingId, send("PUT", body));
     else await api("/api/delegates", send("POST", body));
-    
-    $("dlg").close();
-    say(editingId ? "Delegate updated successfully." : "Delegate added successfully.");
-    load();
-  } catch (err) { 
-    $("formErr").textContent = err.message; 
-  }
-});
+    $("dlg").close(); say("Saved delegate."); load();
+  } catch (err) { $("formErr").textContent = err.message; }
+};
 
 async function remove(d) {
-  if (!confirm("Delete " + d.name + "? This will also remove their associated committees and awards records.")) return;
-  try { 
-    await api("/api/delegates/" + d.id, { method: "DELETE" }); 
-    say("Delegate deleted."); 
-    load(); 
-  } catch (e) { 
-    say(e.message, true); 
-  }
+  if (!confirm("Delete " + d.name + "?")) return;
+  try { await api("/api/delegates/" + d.id, { method: "DELETE" }); say("Delegate deleted."); load(); }
+  catch (e) { say(e.message, true); }
 }
 
 $("addBtn").onclick = () => openForm(null);
 $("cancel").onclick = () => $("dlg").close();
 $("addCommittee").onclick = () => addRow("committees").focus();
 $("addAward").onclick = () => addRow("awards").focus();
-
-let debounceTimer; 
-$("q").addEventListener("input", () => { 
-  clearTimeout(debounceTimer); 
-  debounceTimer = setTimeout(load, 200); 
-});
-
-// Initial load
+$("btnLogout").onclick = async () => { await fetch("/api/auth/logout", { method: "POST" }); window.location.href = "/login.html"; };
+let t; $("q").oninput = () => { clearTimeout(t); t = setTimeout(load, 200); };
 load();
 </script>
 </body>
