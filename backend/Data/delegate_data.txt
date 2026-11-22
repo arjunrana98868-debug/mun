@@ -1,0 +1,58 @@
+Delegate ID: 1
+Name: Aniket KAushal
+Age: 20
+Country: India
+MUN Attendance: 1
+Awards:
+Previous Committees:
+  - UNSA
+--------------------------
+Delegate ID: 2
+Name: Ayush
+Age: 12
+Country: India
+MUN Attendance: 3
+Awards:
+  - Best Delegate
+Previous Committees:
+  - UNSA
+  - UNHRC
+--------------------------
+Delegate ID: 3
+Name: Aryan Rastogi
+Age: 20
+Country: USA
+MUN Attendance: 1
+Awards:
+Previous Committees:
+  - UNHC
+--------------------------
+Delegate ID: 4
+Name: Arjun Rana
+Age: 20
+Country: India
+MUN Attendance: 1
+Awards:
+  - Best Delegate 
+Previous Committees:
+  - UNHRC
+--------------------------
+Delegate ID: 6
+Name: Ayush Sharma
+Age: 21
+Country: India
+MUN Attendance: 0
+Awards:
+Previous Committees:
+--------------------------
+Delegate ID: 7
+Name: Ayush Pundir
+Age: 23
+Country: India
+MUN Attendance: 1
+Awards:
+  - Best Speaker
+Previous Committees:
+  - UNSC
+  - UNDA
+--------------------------

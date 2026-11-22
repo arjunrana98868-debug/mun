@@ -5,7 +5,7 @@
     cout << "+--------------------------------------------------+\n";
     cout << "|                 ADD DELEGATE                     |\n";
     cout << "+--------------------------------------------------+\n";
-
+     
     cout<<"\n+-------------------+---------------------------+\n";
     cout << "| Field             | Input                     |\n";
     cout << "+-------------------+---------------------------+\n";
@@ -26,7 +26,6 @@
             getline(cin,committee);
             prev_committees.push_back(committee);
         }
-    
         cout<<"How many MUN have you attended?: ";
         cin>>mun_attend;
         cout<<"How many awards have you received?: ";
@@ -38,6 +37,8 @@
             getline(cin,award);
             awards.push_back(award);
         }
+    }else{
+        mun_attend = 0;
     }
         try{
         sql::mysql::MySQL_Driver* driver =
@@ -107,6 +108,7 @@
     }
     cout << "Delegate saved to database successfully!" << endl;
 }
+
 catch (sql::SQLException &e) {
     cout << "Database Error: " << e.what() << endl;
         }

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!-- File: frontend/public/delegates.html -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delegates - Programmer Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  :root {
+    --bg: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #0d1322 100%);
+    --card: rgba(23, 31, 48, 0.8);
+    --solid: #171f30;
+    --text: #f3f4f6;
+    --muted: #9ca3af;
+    --accent: #3b82f6;
+    --border: rgba(255, 255, 255, 0.09);
+    --track: rgba(255, 255, 255, 0.06);
+    --danger: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.14);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 50px; }
+  .navbar-outer { position: sticky; top: 0; z-index: 100; background: var(--card); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); margin-bottom: 28px; }
+  .navbar { max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.12rem; color: var(--text); text-decoration: none; }
+  .brand-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), #1d4ed8); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem; }
+  nav { display: flex; gap: 6px; background: var(--track); padding: 4px; border-radius: 12px; border: 1px solid var(--border); flex-wrap: wrap; }
+  nav a { padding: 8px 14px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 0.86rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+  nav a:hover { color: var(--text); }
+  nav a.on { background: var(--solid); color: var(--text); border: 1px solid var(--border); }
+  main { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
+  h1 { font-size: 1.65rem; font-weight: 800; }
+  .sub { color: var(--muted); font-size: 0.9rem; }
+  .bar { display: flex; gap: 10px; margin-bottom: 14px; }
+  input, button { font-family: inherit; }
+  input { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--track); color: var(--text); width: 100%; font-size: 0.9rem; outline: none; }
+  input:focus { border-color: var(--accent); }
+  button { padding: 9px 15px; border-radius: 10px; border: 1px solid var(--border); background: var(--solid); color: var(--text); font-weight: 600; font-size: 0.86rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  button.primary { background: linear-gradient(135deg, var(--accent), #1d4ed8); color: #fff; border: 0; }
+  button.danger { background: var(--danger-bg); color: var(--danger); border-color: rgba(239,68,68,0.3); }
+  button.small { padding: 5px 10px; font-size: 0.78rem; border-radius: 8px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 780px; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+  th { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; background: var(--track); }
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; background: var(--track); border: 1px solid var(--border); font-size: 0.76rem; margin: 2px 4px 2px 0; }
+  .actions { text-align: right; white-space: nowrap; }
+  .actions button { margin-left: 6px; }
+  #msg { margin-bottom: 12px; font-size: 0.88rem; color: var(--muted); min-height: 1.2em; }
+  #msg.err { color: var(--danger); }
+  dialog { border: 1px solid var(--border); border-radius: 18px; background: var(--solid); color: var(--text); padding: 24px; width: min(500px, 92vw); margin: auto; }
+  dialog::backdrop { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+  label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin: 12px 0 5px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .listrow { display: flex; gap: 6px; margin-bottom: 6px; }
+  .row { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<div class="navbar-outer">
+  <div class="navbar">
+    <a href="/dashboard.html" class="brand">
+      <div class="brand-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
+      <span>MUN Programmer Portal</span>
+    </a>
+    <nav>
+      <a href="/dashboard.html"><i class="ph ph-squares-four"></i> Dashboard</a>
+      <a href="/delegates.html" class="on"><i class="ph ph-users-three"></i> Delegates</a>
+      <a href="/committees.html"><i class="ph ph-buildings"></i> Committees & Requests</a>
+      <a href="/index.html"><i class="ph ph-file-magnifying-glass"></i> CV Analyzer</a>
+    </nav>
+    <button id="btnLogout" class="danger small"><i class="ph ph-sign-out"></i> Logout</button>
+  </div>
+</div>
+
+<main>
+  <header>
+    <div>
+      <h1>Delegate Roster Management</h1>
+      <div class="sub">View, search, add, update, or delete registered delegates</div>
+    </div>
+    <div id="count" style="font-weight:700;color:var(--accent);">0 delegates</div>
+  </header>
+
+  <div class="bar">
+    <input type="search" id="q" placeholder="Search by name, country, age, committee or award...">
+    <button id="addBtn" class="primary"><i class="ph ph-plus-bold"></i> Add Delegate</button>
+  </div>
+  <div id="msg"></div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Age</th><th>Country</th><th>MUNs</th><th>Previous Committees</th><th>Awards</th><th style="text-align:right;">Actions</th></tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<dialog id="dlg">
+  <form id="form">
+    <h2 id="dlgTitle" style="margin-bottom:10px;">Add Delegate</h2>
+    <label>Name *</label><input id="f_name" maxlength="100" required>
+    <div class="two">
+      <div><label>Age *</label><input id="f_age" type="number" min="1" max="120" required></div>
+      <div><label>MUNs Attended *</label><input id="f_mun" type="number" min="0" value="0" required></div>
+    </div>
+    <label>Country *</label><input id="f_country" maxlength="100" required>
+    <label>Previous Committees</label>
+    <div id="committees"></div>
+    <button type="button" class="small" id="addCommittee">+ Add Committee</button>
+    <label>Awards</label>
+    <div id="awards"></div>
+    <button type="button" class="small" id="addAward">+ Add Award</button>
+    <div id="formErr" style="color:var(--danger);font-size:0.84rem;margin-top:8px;"></div>
+    <div class="row">
+      <button type="button" id="cancel">Cancel</button>
+      <button type="submit" class="primary">Save Delegate</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let editingId = null;
+
+function say(t, err) { $("msg").textContent = t || ""; $("msg").className = err ? "err" : ""; }
+
+async function api(url, opts) {
+  const res = await fetch(url, opts);
+  if (res.status === 401 || res.status === 403) { window.location.href = "/login.html"; throw new Error("Unauthorized"); }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Request failed");
+  return data;
+}
+const send = (method, body) => ({ method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+
+async function load() {
+  try {
+    const list = await api("/api/delegates?q=" + encodeURIComponent($("q").value));
+    $("count").textContent = list.length + (list.length === 1 ? " delegate" : " delegates");
+    const tb = $("tbody");
+    tb.innerHTML = "";
+    if (!list.length) {
+      tb.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px;">No delegates found.</td></tr>';
+      return;
+    }
+    list.forEach(d => {
+      const tr = document.createElement("tr");
+      [d.id, d.name, d.age, d.country, d.mun_attend].forEach((v, i) => {
+        const td = document.createElement("td"); td.textContent = v; if (i === 1) td.style.fontWeight = "700"; tr.appendChild(td);
+      });
+      const mkChips = (arr) => {
+        const td = document.createElement("td");
+        if (!arr || !arr.length) { td.textContent = "-"; td.style.color = "var(--muted)"; return td; }
+        arr.forEach(x => { const s = document.createElement("span"); s.className = "chip"; s.textContent = x; td.appendChild(s); });
+        return td;
+      };
+      tr.append(mkChips(d.committees), mkChips(d.awards));
+      const tdAct = document.createElement("td"); tdAct.className = "actions";
+      const bE = document.createElement("button"); bE.className = "small"; bE.textContent = "Edit"; bE.onclick = () => openForm(d);
+      const bD = document.createElement("button"); bD.className = "small danger"; bD.textContent = "Delete"; bD.onclick = () => remove(d);
+      tdAct.append(bE, bD); tr.appendChild(tdAct); tb.appendChild(tr);
+    });
+  } catch (e) { if (e.message !== "Unauthorized") say(e.message, true); }
+}
+
+function addRow(id, val) {
+  const row = document.createElement("div"); row.className = "listrow";
+  const inp = document.createElement("input"); inp.value = val || "";
+  const x = document.createElement("button"); x.type = "button"; x.className = "small danger"; x.textContent = "x"; x.onclick = () => row.remove();
+  row.append(inp, x); $(id).appendChild(row); return inp;
+}
+const readRows = (id) => [...$(id).querySelectorAll("input")].map(i => i.value.trim()).filter(Boolean);
+
+function openForm(d) {
+  editingId = d ? d.id : null;
+  $("dlgTitle").textContent = d ? "Edit Delegate" : "Add Delegate";
+  $("f_name").value = d ? d.name : "";
+  $("f_age").value = d ? d.age : "";
+  $("f_mun").value = d ? d.mun_attend : 0;
+  $("f_country").value = d ? d.country : "";
+  $("committees").innerHTML = ""; $("awards").innerHTML = "";
+  (d ? d.committees : []).forEach(c => addRow("committees", c));
+  (d ? d.awards : []).forEach(a => addRow("awards", a));
+  $("formErr").textContent = "";
+  $("dlg").showModal();
+}
+
+$("form").onsubmit = async (e) => {
+  e.preventDefault();
+  const body = { name: $("f_name").value, age: $("f_age").value, mun_attend: $("f_mun").value, country: $("f_country").value, committees: readRows("committees"), awards: readRows("awards") };
+  try {
+    if (editingId) await api("/api/delegates/" + editingId, send("PUT", body));
+    else await api("/api/delegates", send("POST", body));
+    $("dlg").close(); say("Saved delegate."); load();
+  } catch (err) { $("formErr").textContent = err.message; }
+};
+
+async function remove(d) {
+  if (!confirm("Delete " + d.name + "?")) return;
+  try { await api("/api/delegates/" + d.id, { method: "DELETE" }); say("Delegate deleted."); load(); }
+  catch (e) { say(e.message, true); }
+}
+
+$("addBtn").onclick = () => openForm(null);
+$("cancel").onclick = () => $("dlg").close();
+$("addCommittee").onclick = () => addRow("committees").focus();
+$("addAward").onclick = () => addRow("awards").focus();
+$("btnLogout").onclick = async () => { await fetch("/api/auth/logout", { method: "POST" }); window.location.href = "/login.html"; };
+let t; $("q").oninput = () => { clearTimeout(t); t = setTimeout(load, 200); };
+load();
+</script>
+</body>
+</html>
